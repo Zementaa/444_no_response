@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import org.junit.jupiter.api.Test;
 
-import model.MinimalBot;
+import model.SchrottBot;
 
 class testlevel1 {
 
@@ -19,7 +19,7 @@ class testlevel1 {
 		try {
 			input = new Scanner(file);
 			// System.out.println(input.next());
-			System.out.println(MinimalBot.init(input).nextLine());
+			System.out.println(SchrottBot.init(input).nextLine());
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
