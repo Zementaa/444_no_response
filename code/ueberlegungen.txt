@@ -1,0 +1,4 @@
+currentCellStatus:
+
+FLOOR
+FINISH playerId formCount

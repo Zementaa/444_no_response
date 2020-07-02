@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+	targetNamespace="http://namespaces.github.com/Zementaa/444_no_response"
+	xmlns="http://namespaces.github.com/Zementaa/444_no_response"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified"
+>
+	<xs:simpleType name="cellStatus">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="WALL"/>
+			<xs:enumeration value="FLOOR"/>
+			<xs:enumeration value="FORM 444 0"/>
+			<xs:enumeration value="FORM 444 1"/>
+			<xs:enumeration value="FORM 444 2"/>
+			<xs:enumeration value="FORM 444 3"/>
+			<xs:enumeration value="FINISH 444 4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+		
+	
+	<xs:element name="init">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="maze info">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="sizeX" type="xs:int" />
+							<xs:element name="sizeY" type="xs:int" />
+							<xs:element name="level" type="xs:int" />
+						</xs:sequence>	
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="player info">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="id" type="xs:int" />
+							<xs:element name="startX" type="xs:int" />
+							<xs:element name="startY" type="xs:int" />
+						</xs:sequence>
+					</xs:complexType> 
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:simpleType name="actionResult">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="OK"/>
+			<xs:enumeration value="OK WEST"/>
+			<xs:enumeration value="OK NORTH"/>
+			<xs:enumeration value="OK EAST"/>
+			<xs:enumeration value="OK SOUTH"/>
+			<xs:enumeration value="NOK BLOCKED"/>
+			<xs:enumeration value="OK @startX @startY"/>
+			<xs:enumeration value="NOK NOTYOURS"/>
+			<xs:enumeration value="NOK EMPTY"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:element name="input">
+		<xs:complexType>	
+			<xs:sequence>
+				<xs:element name="lastActionResult" type="cellStatus" />
+				<xs:element name="currentCellStatus" type="xs:string" />
+				<xs:element name="northCellStatus" type="cellStatus" />
+				<xs:element name="eastCellStatus" type="cellStatus" />
+				<xs:element name="southCellStatus" type="cellStatus" />
+				<xs:element name="westCellStatus" type="cellStatus" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>
