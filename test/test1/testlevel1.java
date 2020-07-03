@@ -2,11 +2,15 @@ package test1;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 import org.junit.jupiter.api.Test;
 
-import model.Zug;
+import model.SchrottBot;
 
 class testlevel1 {
 
@@ -30,26 +34,31 @@ class testlevel1 {
 
 	@Test
 	void testZug() {
-		Zug zug = new Zug(20, 20);
+		// Zug zug = new Zug(20, 20);
+//
+//		zug.aktualisieren("go north");
+//		zug.aktualisieren("go north");
+//		zug.aktualisieren("go north");
+//		zug.aktualisieren("go north");
+//		zug.aktualisieren("go north");
+//
+//		System.out.println(zug.getVorzug());
+//
+//		System.out.println(zug.getKoordinaten().getX());
+//		System.out.println(zug.getKoordinaten().getY());
 
-		zug.aktualisieren("go north");
-		zug.aktualisieren("go north");
-		zug.aktualisieren("go north");
-		zug.aktualisieren("go north");
-		zug.aktualisieren("go north");
+		List<Integer> list = Arrays.asList(1, 2, 3, 4);
+		SecureRandom random = new SecureRandom();
+		Collections.shuffle(list, random);
 
-		System.out.println(zug.getVorzug());
+		System.out.println(list);
 
-		System.out.println(zug.getKoordinaten().getX());
-		System.out.println(zug.getKoordinaten().getY());
+		Collections.shuffle(list, random);
 
-		String test = "FINISH 1 0";
+		System.out.println(list);
 
-		String[] parts = test.split(" ");
-		String lastDigit = parts[parts.length - 1].trim();
-		int last = Integer.parseInt(lastDigit);
-
-		System.out.println(last);
+		SchrottBot bot = new SchrottBot();
+		bot.naechstenZugAktualisieren("FLOOR", "WALL", "WALL", "WALL");
 
 	}
 

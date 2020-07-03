@@ -21,7 +21,7 @@ public class Zug {
 			setVorzug("go south");
 			break;
 		case "go east":
-			koordinaten.setX(koordinaten.getY() + 1);
+			koordinaten.setX(koordinaten.getX() + 1);
 			setVorzug("go west");
 			break;
 		case "go south":
@@ -29,11 +29,32 @@ public class Zug {
 			setVorzug("go north");
 			break;
 		default:
-			koordinaten.setX(koordinaten.getY() - 1);
+			koordinaten.setX(koordinaten.getX() - 1);
 			setVorzug("go east");
+			break;
 
 		}
 
+	}
+
+	public Koordinaten aktualisieren2(String richtung) {
+
+		switch (richtung) {
+		case "go north":
+			koordinaten.setY(koordinaten.getY() - 1);
+			break;
+		case "go east":
+			koordinaten.setX(koordinaten.getX() + 1);
+			break;
+		case "go south":
+			koordinaten.setY(koordinaten.getY() + 1);
+			break;
+		default:
+			koordinaten.setX(koordinaten.getX() - 1);
+			break;
+
+		}
+		return this.getKoordinaten();
 	}
 
 	public int getSchrittzahl() {

@@ -1,6 +1,9 @@
 package model;
 
+import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -30,9 +33,11 @@ public class SchrottBot {
 	private static Koordinaten[] koordinatenMeinesUmfelds = new Koordinaten[4];
 	private static String[] bewegungsRichtung = { "go north", "go east", "go south", "go west" };
 	private static String ausgabe = "";
-	private static Zug zug;
+	private static Zug aktuellerZug;
+	private static Zug naechsterZug;
 
 	private static KartenElement kartenElement;
+	static Boolean einbahnstrasse = false;
 
 	/**
 	 * Hauptmethode zum Ausführen des Bots
@@ -57,12 +62,17 @@ public class SchrottBot {
 			String southCellStatus = input.nextLine();
 			String westCellStatus = input.nextLine();
 
-			// Debug Information ausgeben (optional möglich)
-			System.err.println("Ergebnis Vorrunde: " + lastActionsResult);
+			naechstenZugAktualisieren(northCellStatus, eastCellStatus, southCellStatus, westCellStatus);
 
 			// Rundenaktion ausgeben
-			rundenaktion(lastActionsResult, currentCellStatus, northCellStatus, eastCellStatus, southCellStatus,
-					westCellStatus);
+			rundenaktion(lastActionsResult, currentCellStatus);
+
+			// Debug Information ausgeben (optional möglich)
+			System.err.println("Ergebnis Vorrunde: aktuell X: " + aktuellerZug.getKoordinaten().getX() + "Y: "
+					+ aktuellerZug.getKoordinaten().getY() + "\nnaechster Zug X: "
+					+ naechsterZug.getKoordinaten().getX() + "Y: " + naechsterZug.getKoordinaten().getY()
+					+ "\nSchrittzahl: " + aktuellerZug.getSchrittzahl() + " Vorzug: " + aktuellerZug.getVorzug()
+					+ "\n Ziele: " + meineZiele.values().size());
 
 		}
 
@@ -79,28 +89,25 @@ public class SchrottBot {
 	 * @param southCellStatus
 	 * @param westCellStatus
 	 */
-	private static void rundenaktion(String lastActionsResult, String currentCellStatus, String northCellStatus,
-			String eastCellStatus, String southCellStatus, String westCellStatus) {
-
-		statusMeinesUmfelds[0] = northCellStatus;
-		statusMeinesUmfelds[1] = eastCellStatus;
-		statusMeinesUmfelds[2] = southCellStatus;
-		statusMeinesUmfelds[3] = westCellStatus;
-
-		koordinatenAktualisieren();
-
+	private static void rundenaktion(String lastActionsResult, String currentCellStatus) {
 		int floorCount = 0;
 
-		for (String floor : statusMeinesUmfelds) {
+		for (
+
+		String floor : statusMeinesUmfelds) {
 			if (floor.equals("FLOOR") || floor.contains("FINISH")) {
 				floorCount++;
 			}
 		}
 
-		if (floorCount > 1 || zug.getSchrittzahl() == 0) {
-			if (lastActionsResult.equals("NOK BLOCKED")) {
-				// move();
-			}
+		if (floorCount == 2) {
+			einbahnstrasse = true;
+		}
+
+		if (floorCount > 1 || aktuellerZug.getSchrittzahl() == 0) {
+//			if (lastActionsResult.equals("NOK BLOCKED")) {
+//				// move();
+//			}
 
 			if (currentCellStatus.contains("FINISH " + getPlayerId() + " " + getFormCount())) {
 				ausgabe = "finish";
@@ -117,7 +124,8 @@ public class SchrottBot {
 						break;
 
 					} else if (statusMeinesUmfelds[i].equals("FLOOR")
-							&& !bewegungsRichtung[i].equals(zug.getVorzug())) {
+							&& !bewegungsRichtung[i].equals(aktuellerZug.getVorzug())) {
+
 						if (sackgassen.isEmpty()) {
 							ausgabe = bewegungsRichtung[i];
 							kartenElement = new Boden();
@@ -131,6 +139,7 @@ public class SchrottBot {
 								}
 
 							}
+
 						}
 
 					}
@@ -143,71 +152,18 @@ public class SchrottBot {
 				ausgabe = "finish";
 			} else {
 				kartenElement = new Sackgasse();
-				ausgabe = zug.getVorzug();
+				ausgabe = aktuellerZug.getVorzug();
 			}
 		}
-		zug.aktualisieren(ausgabe);
-		meineZiele.put(kartenElement, zug.getKoordinaten());
-		if (kartenElement.getClass() == Sackgasse.class) {
-			sackgassen.put((Sackgasse) kartenElement, zug.getKoordinaten());
+		aktuellerZug.aktualisieren(ausgabe);
+		// kartenElement.setKoordinaten(aktuellerZug.getKoordinaten());
+		// if (!meineZiele.containsValue(aktuellerZug.getKoordinaten())) {
+		meineZiele.put(kartenElement, aktuellerZug.getKoordinaten());
+		if (kartenElement.getClass() == Sackgasse.class || meineZiele.containsValue(aktuellerZug.getKoordinaten())) {
+			sackgassen.put(new Sackgasse(), aktuellerZug.getKoordinaten());
 		}
+		// }
 		System.out.println(ausgabe);
-//		// Take First
-//		if (currentCellStatus.equals("FORM " + playerId + " " + firstFormId)) {
-//			System.out.println("take");
-//			meineZiele.put(new Formular(firstFormId), koordinaten);
-//		}
-//
-//		// Take any
-//		if (currentCellStatus.equals("FORM " + playerId + " " + formId)) {
-//			System.out.println("take");
-//			meineZiele.put(new Formular(formId), koordinaten);
-//			nextFormId++;
-//		}
-//		// Sachbearbeiter gefunden -> Position und formCount auslesen
-//		// TODO
-//		if (currentCellStatus.equals("FINISH " + playerId + " " + 4)) {
-//			// System.out.println("finish");
-//			meineZiele.put(new Sachbearbeiter(), koordinaten);
-//			// hier soll ausgelesen werden wie viele Formulare es gibt!
-//			formCount = 4;
-//		}
-//
-//		// Go
-//		else if (westCellStatus.equals("FLOOR") || westCellStatus.equals("FINISH " + playerId + " 0")) {
-//
-//			System.out.println("go west");
-//			koordinaten.setX(koordinaten.getX() - 1);
-//
-//		}
-//
-//		// Position
-//		else
-//			System.out.println("position");
-
-	}
-
-	private static void koordinatenAktualisieren() {
-
-		// nördliches Feld
-		zug.getKoordinaten().setY(zug.getKoordinaten().getY() - 1);
-
-		koordinatenMeinesUmfelds[0] = zug.getKoordinaten();
-
-		// östliches Feld
-		zug.getKoordinaten().setX(zug.getKoordinaten().getX() + 1);
-
-		koordinatenMeinesUmfelds[1] = zug.getKoordinaten();
-
-		// südliches Feld
-		zug.getKoordinaten().setY(zug.getKoordinaten().getY() + 1);
-
-		koordinatenMeinesUmfelds[2] = zug.getKoordinaten();
-
-		// westliches Feld
-		zug.getKoordinaten().setX(zug.getKoordinaten().getX() - 1);
-
-		koordinatenMeinesUmfelds[3] = zug.getKoordinaten();
 
 	}
 
@@ -228,9 +184,88 @@ public class SchrottBot {
 		startY = input.nextInt(); // Y-Koordinate der Startposition dieses Players
 		input.nextLine(); // Beenden der zweiten Zeile
 
-		zug = new Zug(startX, startY);
+		aktuellerZug = new Zug(startX, startY);
+		naechsterZug = aktuellerZug;
 
 	}
+
+	public static void naechstenZugAktualisieren(String northCellStatus, String eastCellStatus, String southCellStatus,
+			String westCellStatus) {
+		List<Integer> list = Arrays.asList(1, 2, 3, 4);
+		SecureRandom random = new SecureRandom();
+		// Collections.shuffle(list, random);
+		naechsterZug = aktuellerZug;
+
+		for (int i = 0; i < 4; i++) {
+
+			switch (list.get(i)) {
+			// nördlich
+			case 1:
+				statusMeinesUmfelds[i] = northCellStatus;
+				bewegungsRichtung[i] = "go north";
+
+				break;
+
+			// östlich
+			case 2:
+				statusMeinesUmfelds[i] = eastCellStatus;
+				bewegungsRichtung[i] = "go east";
+
+				break;
+
+			// südlich
+			case 3:
+				statusMeinesUmfelds[i] = southCellStatus;
+				bewegungsRichtung[i] = "go south";
+
+				break;
+
+			// westlich
+			default:
+				statusMeinesUmfelds[i] = westCellStatus;
+				bewegungsRichtung[i] = "go west";
+
+				break;
+			}
+			// TODO
+			koordinatenMeinesUmfelds[i] = naechsterZug.aktualisieren2(bewegungsRichtung[i]);
+
+		}
+
+	}
+
+//	// Take First
+//	if (currentCellStatus.equals("FORM " + playerId + " " + firstFormId)) {
+//		System.out.println("take");
+//		meineZiele.put(new Formular(firstFormId), koordinaten);
+//	}
+//
+//	// Take any
+//	if (currentCellStatus.equals("FORM " + playerId + " " + formId)) {
+//		System.out.println("take");
+//		meineZiele.put(new Formular(formId), koordinaten);
+//		nextFormId++;
+//	}
+//	// Sachbearbeiter gefunden -> Position und formCount auslesen
+//	// TODO
+//	if (currentCellStatus.equals("FINISH " + playerId + " " + 4)) {
+//		// System.out.println("finish");
+//		meineZiele.put(new Sachbearbeiter(), koordinaten);
+//		// hier soll ausgelesen werden wie viele Formulare es gibt!
+//		formCount = 4;
+//	}
+//
+//	// Go
+//	else if (westCellStatus.equals("FLOOR") || westCellStatus.equals("FINISH " + playerId + " 0")) {
+//
+//		System.out.println("go west");
+//		koordinaten.setX(koordinaten.getX() - 1);
+//
+//	}
+//
+//	// Position
+//	else
+//		System.out.println("position");
 
 	public static int getSizeX() {
 		return sizeX;
@@ -286,6 +321,110 @@ public class SchrottBot {
 
 	public static void setFormCount(int formCount) {
 		SchrottBot.formCount = formCount;
+	}
+
+	public static int getFirstFormId() {
+		return firstFormId;
+	}
+
+	public static void setFirstFormId(int firstFormId) {
+		SchrottBot.firstFormId = firstFormId;
+	}
+
+	public static int getFormId() {
+		return formId;
+	}
+
+	public static void setFormId(int formId) {
+		SchrottBot.formId = formId;
+	}
+
+	public static int getNextFormId() {
+		return nextFormId;
+	}
+
+	public static void setNextFormId(int nextFormId) {
+		SchrottBot.nextFormId = nextFormId;
+	}
+
+	public static int getCountForms() {
+		return countForms;
+	}
+
+	public static void setCountForms(int countForms) {
+		SchrottBot.countForms = countForms;
+	}
+
+	public static Map<KartenElement, Koordinaten> getMeineZiele() {
+		return meineZiele;
+	}
+
+	public static void setMeineZiele(Map<KartenElement, Koordinaten> meineZiele) {
+		SchrottBot.meineZiele = meineZiele;
+	}
+
+	public static Map<Sackgasse, Koordinaten> getSackgassen() {
+		return sackgassen;
+	}
+
+	public static void setSackgassen(Map<Sackgasse, Koordinaten> sackgassen) {
+		SchrottBot.sackgassen = sackgassen;
+	}
+
+	public static String[] getStatusMeinesUmfelds() {
+		return statusMeinesUmfelds;
+	}
+
+	public static void setStatusMeinesUmfelds(String[] statusMeinesUmfelds) {
+		SchrottBot.statusMeinesUmfelds = statusMeinesUmfelds;
+	}
+
+	public static Koordinaten[] getKoordinatenMeinesUmfelds() {
+		return koordinatenMeinesUmfelds;
+	}
+
+	public static void setKoordinatenMeinesUmfelds(Koordinaten[] koordinatenMeinesUmfelds) {
+		SchrottBot.koordinatenMeinesUmfelds = koordinatenMeinesUmfelds;
+	}
+
+	public static String[] getBewegungsRichtung() {
+		return bewegungsRichtung;
+	}
+
+	public static void setBewegungsRichtung(String[] bewegungsRichtung) {
+		SchrottBot.bewegungsRichtung = bewegungsRichtung;
+	}
+
+	public static String getAusgabe() {
+		return ausgabe;
+	}
+
+	public static void setAusgabe(String ausgabe) {
+		SchrottBot.ausgabe = ausgabe;
+	}
+
+	public static Zug getAktuellerZug() {
+		return aktuellerZug;
+	}
+
+	public static void setAktuellerZug(Zug aktuellerZug) {
+		SchrottBot.aktuellerZug = aktuellerZug;
+	}
+
+	public static Zug getNaechsterZug() {
+		return naechsterZug;
+	}
+
+	public static void setNaechsterZug(Zug naechsterZug) {
+		SchrottBot.naechsterZug = naechsterZug;
+	}
+
+	public static KartenElement getKartenElement() {
+		return kartenElement;
+	}
+
+	public static void setKartenElement(KartenElement kartenElement) {
+		SchrottBot.kartenElement = kartenElement;
 	}
 
 }
