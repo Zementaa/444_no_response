@@ -6,12 +6,9 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 
 import org.junit.jupiter.api.Test;
-
-import model.Status;
 
 class testlevel1 {
 
@@ -60,31 +57,6 @@ class testlevel1 {
 
 //		SchrottBot bot = new SchrottBot();
 //		bot.naechstenZugAktualisieren("FLOOR", "WALL", "WALL", "WALL");
-
-	}
-
-	@Test
-	void test2() {
-
-		Status status = new Status();
-		status.setCurrentCellStatus("CFLOOR");
-		status.setNorthCellStatus("NFLOOR");
-		status.setEastCellStatus("EFLOOR");
-		status.setSouthCellStatus("SFLOOR");
-		status.setWestCellStatus("WFLOOR");
-		status.aktualisiereStatus();
-//		for (String statusAktuell : status.getStatusUndWeg().keySet()) {
-//			System.out.println(statusAktuell);
-//		}
-
-		Optional<String> result = status.getStatusUndWeg().keySet().stream()
-				.filter(statusAktuell -> statusAktuell.equals("NFLOOR")).findAny();
-		if (result.isPresent()) {
-			System.out.println(status.getStatusUndWeg().get(result.get()));
-
-		} else {
-			System.out.println("go south");
-		}
 
 	}
 
