@@ -2,14 +2,13 @@ package model;
 
 public class Zug {
 	private int schrittzahl = 0;
-	private Koordinaten koordinaten;
+	private Koordinate koordinaten;
 	private String vorzug = "";
 
 	public Zug(int startX, int startY) {
 		super();
-		koordinaten = new Koordinaten();
-		this.koordinaten.setX(startX);
-		this.koordinaten.setY(startY);
+		koordinaten = new Koordinate(startX, startY);
+
 	}
 
 	public void aktualisieren(String richtung) {
@@ -31,13 +30,12 @@ public class Zug {
 		default:
 			koordinaten.setX(koordinaten.getX() - 1);
 			setVorzug("go east");
-			break;
 
 		}
 
 	}
 
-	public Koordinaten aktualisieren2(String richtung) {
+	public Koordinate aktualisieren2(String richtung) {
 
 		switch (richtung) {
 		case "go north":
@@ -65,11 +63,11 @@ public class Zug {
 		this.schrittzahl = schrittzahl;
 	}
 
-	public Koordinaten getKoordinaten() {
+	public Koordinate getKoordinaten() {
 		return koordinaten;
 	}
 
-	public void setKoordinaten(Koordinaten koordinaten) {
+	public void setKoordinaten(Koordinate koordinaten) {
 		this.koordinaten = koordinaten;
 	}
 

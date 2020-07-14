@@ -2,13 +2,18 @@ package model;
 
 public abstract class KartenElement {
 
-	private Koordinaten koordinaten;
+	private Koordinate koordinaten;
 
-	public Koordinaten getKoordinaten() {
+	public KartenElement(Koordinate koordinaten) {
+		super();
+		this.koordinaten = koordinaten;
+	}
+
+	public Koordinate getKoordinaten() {
 		return koordinaten;
 	}
 
-	public void setKoordinaten(Koordinaten koordinaten) {
+	public void setKoordinaten(Koordinate koordinaten) {
 		this.koordinaten = koordinaten;
 	}
 

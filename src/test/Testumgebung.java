@@ -1,29 +1,22 @@
 package test;
 
-import model.SchrottBot;
-
 public class Testumgebung {
 
 	public static void main(String[] args) {
+		int formCount = 0;
+		String string = "FINISH 1 2 !2";
+		String[] partsF = string.split(" ");
+//
+//		if (partsF.length > 3) {
+//			partsF = Arrays.copyOf(partsF, partsF.length - 1);
+//		}
 
-		SchrottBot bot = new SchrottBot();
+		String lastDigitF = partsF[2];
+		int lastF = Integer.parseInt(lastDigitF);
 
-		init(bot);
-
-	}
-
-	public static void init(SchrottBot bot) {
-
-		// 1. Zeile: Maze Infos
-		bot.setSizeX(20); // X-Groesse des Spielfeldes (Breite)
-		bot.setSizeY(20); // Y-Groesse des Spielfeldes (Hoehe)
-		bot.setLevel(1); // Level des Matches
-
-		// 2. Zeile: Player Infos
-		bot.setPlayerId(444); // id dieses Players / Bots
-		bot.setStartX(0); // X-Koordinate der Startposition dieses Player
-		bot.setStartY(0); // Y-Koordinate der Startposition dieses Players
-
+		formCount = lastF;
+		System.out.println(formCount);
+//
 	}
 
 }

@@ -3,8 +3,8 @@ package model;
 public class Formular extends KartenElement {
 	private int id;
 
-	public Formular(int id) {
-		super();
+	public Formular(Koordinate koordinate, int id) {
+		super(koordinate);
 		this.id = id;
 	}
 
