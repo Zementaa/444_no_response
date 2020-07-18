@@ -3,11 +3,13 @@ package model;
 import java.util.Random;
 
 public class Kombinatorik {
-	private final String norden = "norden";
-	private final String sueden = "sueden";
-	private final String westen = "westen";
-	private final String osten = "osten";
-	private final String gehNachNorden = "go north";
+
+	// TODO Eingang zu "Höhle" merken
+	private static final String NORDEN = "norden";
+	private static final String sueden = "sueden";
+	private static final String westen = "westen";
+	private static final String osten = "osten";
+	private static final String GEH_NACH_NORDEN = "go north";
 	private final String gehNachSueden = "go south";
 	private final String gehNachWesten = "go west";
 	private final String gehNachOsten = "go east";
@@ -34,7 +36,7 @@ public class Kombinatorik {
 		int suedenZahl = karte[startX][startY + 1].getExplorationsZahl();
 		int westenZahl = karte[startX - 1][startY].getExplorationsZahl();
 
-		String[] einsZweiDreiVier = { gehNachNorden, gehNachOsten, gehNachSueden, gehNachWesten };
+		String[] einsZweiDreiVier = { GEH_NACH_NORDEN, gehNachOsten, gehNachSueden, gehNachWesten };
 
 		int zufallsZahl4 = zufall.nextInt(3);
 		int zufallsZahl3 = zufall.nextInt(2);
@@ -50,7 +52,7 @@ public class Kombinatorik {
 
 		// Norden am größten
 		if (nordenZahl > ostenZahl && nordenZahl > suedenZahl && nordenZahl > westenZahl) {
-			ausgabe = gehNachNorden;
+			ausgabe = GEH_NACH_NORDEN;
 		} else
 
 		// Osten am größten
@@ -78,7 +80,7 @@ public class Kombinatorik {
 			if (zufallsZahl4 % 2 == 0) {
 				ausgabe = gehNachOsten;
 			} else
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 		} else
 
 		// Norden und Westen die zwei größten
@@ -86,7 +88,7 @@ public class Kombinatorik {
 			if (zufallsZahl4 % 2 == 0) {
 				ausgabe = gehNachWesten;
 			} else
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 		} else
 
 		// Norden und Süden die zwei größten
@@ -94,7 +96,7 @@ public class Kombinatorik {
 			if (zufallsZahl4 % 2 == 0) {
 				ausgabe = gehNachSueden;
 			} else
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 		} else
 
 		// Osten und Süden die zwei größten
@@ -138,7 +140,7 @@ public class Kombinatorik {
 			if (zufallsZahl3 == 0) {
 				ausgabe = gehNachSueden;
 			} else if (zufallsZahl3 == 1) {
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			} else
 				ausgabe = gehNachWesten;
 		} else
@@ -146,7 +148,7 @@ public class Kombinatorik {
 		// Süden am kleinsten
 		if (suedenZahl < nordenZahl && nordenZahl == ostenZahl && nordenZahl == westenZahl) {
 			if (zufallsZahl3 == 0) {
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			} else if (zufallsZahl3 == 1) {
 				ausgabe = gehNachOsten;
 			} else
@@ -160,7 +162,7 @@ public class Kombinatorik {
 			} else if (zufallsZahl3 == 1) {
 				ausgabe = gehNachOsten;
 			} else
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 		}
 		return this.ausgabe;
 	}
@@ -209,7 +211,7 @@ public class Kombinatorik {
 		// 4 Möglichkeiten
 
 		// Norden Osten Süden
-		if (lastWordEins.equals(norden) && lastWordZwei.equals(osten) && lastWordDrei.equals(sueden)) {
+		if (lastWordEins.equals(NORDEN) && lastWordZwei.equals(osten) && lastWordDrei.equals(sueden)) {
 			// Gleiche Explorationszahl
 			if (nordenZahl == ostenZahl && nordenZahl == suedenZahl) {
 				if (zufallsZahl3 == 0) {
@@ -217,12 +219,12 @@ public class Kombinatorik {
 				} else if (zufallsZahl3 == 1) {
 					ausgabe = gehNachOsten;
 				} else
-					ausgabe = gehNachNorden;
+					ausgabe = GEH_NACH_NORDEN;
 			} else
 			// Norden am größten
 			if (nordenZahl > ostenZahl && nordenZahl > suedenZahl) {
 
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			} else
 			// Osten am größten
 			if (ostenZahl > nordenZahl && ostenZahl > suedenZahl) {
@@ -237,14 +239,14 @@ public class Kombinatorik {
 				if (zufallsZahl2 == 0) {
 					ausgabe = gehNachOsten;
 				} else
-					ausgabe = gehNachNorden;
+					ausgabe = GEH_NACH_NORDEN;
 			} else
 			// Norden und Süden gleich aber größer als Osten
 			if (nordenZahl == suedenZahl && nordenZahl > ostenZahl) {
 				if (zufallsZahl2 == 0) {
 					ausgabe = gehNachSueden;
 				} else
-					ausgabe = gehNachNorden;
+					ausgabe = GEH_NACH_NORDEN;
 			} else
 			// Süden und Osten gleich aber größer als Norden
 			if (suedenZahl > ostenZahl && ostenZahl > nordenZahl) {
@@ -258,7 +260,7 @@ public class Kombinatorik {
 
 		// TODO Methode mit sechs Übergabeparameter
 		// Norden Osten Westen
-		if (lastWordEins.equals(norden) && lastWordZwei.equals(osten) && lastWordDrei.equals(westen)) {
+		if (lastWordEins.equals(NORDEN) && lastWordZwei.equals(osten) && lastWordDrei.equals(westen)) {
 			// Gleiche Explorationszahl
 			if (nordenZahl == ostenZahl && nordenZahl == westenZahl) {
 				if (zufallsZahl3 == 0) {
@@ -266,11 +268,11 @@ public class Kombinatorik {
 				} else if (zufallsZahl3 == 1) {
 					ausgabe = gehNachOsten;
 				} else
-					ausgabe = gehNachNorden;
+					ausgabe = GEH_NACH_NORDEN;
 			} else
 			// Norden am größten
 			if (nordenZahl > ostenZahl && nordenZahl > westenZahl) {
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			} else
 			// Osten am größten
 			if (ostenZahl > nordenZahl && ostenZahl > westenZahl) {
@@ -285,14 +287,14 @@ public class Kombinatorik {
 				if (zufallsZahl2 == 0) {
 					ausgabe = gehNachOsten;
 				} else
-					ausgabe = gehNachNorden;
+					ausgabe = GEH_NACH_NORDEN;
 			} else
 			// Norden und Westen gleich aber größer als Osten
 			if (nordenZahl == westenZahl && nordenZahl > ostenZahl) {
 				if (zufallsZahl2 == 0) {
 					ausgabe = gehNachWesten;
 				} else
-					ausgabe = gehNachNorden;
+					ausgabe = GEH_NACH_NORDEN;
 			} else {
 				// Westen und Osten gleich aber größer als Norden
 
@@ -305,19 +307,19 @@ public class Kombinatorik {
 		}
 
 		// Norden Süden Westen
-		if (lastWordEins.equals(norden) && lastWordZwei.equals(sueden) && lastWordDrei.equals(westen)) {
+		if (lastWordEins.equals(NORDEN) && lastWordZwei.equals(sueden) && lastWordDrei.equals(westen)) {
 			// Gleiche Explorationszahl
 			if (nordenZahl == suedenZahl && nordenZahl == westenZahl) {
 				if (zufallsZahl3 == 0) {
 					ausgabe = gehNachWesten;
 				} else if (zufallsZahl3 == 1) {
-					ausgabe = gehNachNorden;
+					ausgabe = GEH_NACH_NORDEN;
 				} else
 					ausgabe = gehNachSueden;
 			} else
 			// Norden am größten
 			if (nordenZahl > suedenZahl && nordenZahl > westenZahl) {
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			} else
 			// Süden am größten
 			if (suedenZahl > nordenZahl && suedenZahl > westenZahl) {
@@ -332,14 +334,14 @@ public class Kombinatorik {
 				if (zufallsZahl2 == 0) {
 					ausgabe = gehNachSueden;
 				} else
-					ausgabe = gehNachNorden;
+					ausgabe = GEH_NACH_NORDEN;
 			} else
 			// Norden und Westen gleich aber größer als Süden
 			if (nordenZahl == westenZahl && nordenZahl > suedenZahl) {
 				if (zufallsZahl2 == 0) {
 					ausgabe = gehNachWesten;
 				} else
-					ausgabe = gehNachNorden;
+					ausgabe = GEH_NACH_NORDEN;
 			} else
 			// Westen und Süden gleich aber größer als Norden
 			if (westenZahl == suedenZahl && suedenZahl > nordenZahl) {
@@ -417,15 +419,15 @@ public class Kombinatorik {
 
 		// 6 Möglichkeiten
 		// Norden und Osten
-		if (lastWordEins.equals(norden) && lastWordZwei.equals(osten)) {
+		if (lastWordEins.equals(NORDEN) && lastWordZwei.equals(osten)) {
 			if (nordenZahl == ostenZahl) {
 				if (zufallsZahl2 == 0) {
 					ausgabe = gehNachOsten;
 				} else
-					ausgabe = gehNachNorden;
+					ausgabe = GEH_NACH_NORDEN;
 			}
 			if (nordenZahl > ostenZahl) {
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			}
 			if (ostenZahl > nordenZahl) {
 				ausgabe = gehNachOsten;
@@ -433,15 +435,15 @@ public class Kombinatorik {
 		}
 
 		// Norden und Süden
-		if (lastWordEins.equals(norden) && lastWordZwei.equals(sueden)) {
+		if (lastWordEins.equals(NORDEN) && lastWordZwei.equals(sueden)) {
 			if (nordenZahl == suedenZahl) {
 				if (zufallsZahl2 == 0) {
 					ausgabe = gehNachSueden;
 				} else
-					ausgabe = gehNachNorden;
+					ausgabe = GEH_NACH_NORDEN;
 			}
 			if (nordenZahl > suedenZahl) {
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			}
 			if (suedenZahl > nordenZahl) {
 				ausgabe = gehNachSueden;
@@ -449,15 +451,15 @@ public class Kombinatorik {
 		}
 
 		// Norden und Westen
-		if (lastWordEins.equals(norden) && lastWordZwei.equals(westen)) {
+		if (lastWordEins.equals(NORDEN) && lastWordZwei.equals(westen)) {
 			if (nordenZahl == westenZahl) {
 				if (zufallsZahl2 == 0) {
 					ausgabe = gehNachWesten;
 				} else
-					ausgabe = gehNachNorden;
+					ausgabe = GEH_NACH_NORDEN;
 			}
 			if (nordenZahl > westenZahl) {
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			}
 			if (westenZahl > nordenZahl) {
 				ausgabe = gehNachWesten;
@@ -522,8 +524,8 @@ public class Kombinatorik {
 		String[] partsF = eins.split(" ");
 		String lastWord = partsF[partsF.length - 1].trim();
 		switch (lastWord) {
-		case norden:
-			ausgabe = gehNachNorden;
+		case NORDEN:
+			ausgabe = GEH_NACH_NORDEN;
 			break;
 		case osten:
 			ausgabe = gehNachOsten;
