@@ -13,13 +13,17 @@ public class Kombinatorik {
 	private final String gehNachOsten = "go east";
 	private String ausgabe = "";
 	private int playerId;
+	private int sizeY;
+	private int sizeX;
 	private String meinFinish;
 	private String meinForm;
 	private Random zufall = new Random();
 
-	public Kombinatorik(int playerId) {
+	public Kombinatorik(int playerId, int sizeX, int sizeY) {
 		this.playerId = playerId;
 		meinFinish = "FINISH " + playerId;
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
 
 		meinForm = "FORM " + playerId + " 1";
 	}
@@ -30,10 +34,11 @@ public class Kombinatorik {
 		// in verschiedene FÃ¤lle
 
 		// TODO was wenn Objekt auf anderen Seite des Spielfelds liegt?
-		int nordenZahl = karte[startX][startY - 1].getExplorationsZahl();
-		int ostenZahl = karte[startX + 1][startY].getExplorationsZahl();
-		int suedenZahl = karte[startX][startY + 1].getExplorationsZahl();
-		int westenZahl = karte[startX - 1][startY].getExplorationsZahl();
+		// TODO in Methode auslagern + für alle anderen anpassen
+		int nordenZahl = karte[startX][((startY - 1) + sizeY) % sizeY].getExplorationsZahl();
+		int ostenZahl = karte[((startX + 1) + sizeX) % sizeX][startY].getExplorationsZahl();
+		int suedenZahl = karte[startX][((startY + 1) + sizeY) % sizeY].getExplorationsZahl();
+		int westenZahl = karte[((startX - 1) + sizeX) % sizeX][startY].getExplorationsZahl();
 
 		String[] einsZweiDreiVier = { gehNachNorden, gehNachOsten, gehNachSueden, gehNachWesten };
 

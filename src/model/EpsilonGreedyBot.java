@@ -21,6 +21,8 @@ public class EpsilonGreedyBot {
 	private static int playerId;
 	private static int startX;
 	private static int startY;
+	private static int vorherX;
+	private static int vorherY;
 	private static int zielX;
 	private static int zielY;
 	private static int kartenGroesse;
@@ -87,6 +89,7 @@ public class EpsilonGreedyBot {
 		if (level == 5) {
 			anzahlSheets = input.nextInt();
 		}
+
 		input.nextLine(); // Beenden der zweiten Zeile
 
 		kartenGroesse = sizeX * sizeY;
@@ -95,7 +98,7 @@ public class EpsilonGreedyBot {
 		meinForm = "FORM " + playerId + " ";
 		karte = new Explorer[sizeX][sizeY];
 		karte[startX][startY] = new Explorer("FLOOR", playerId, countForms + 1);
-		kombinator = new Kombinatorik(playerId);
+		kombinator = new Kombinatorik(playerId, sizeX, sizeY);
 		zieleAufgedeckt++;
 
 		queue.offer(karte[startX][startY]);
@@ -113,11 +116,51 @@ public class EpsilonGreedyBot {
 			// Rundeninformationen auslesen
 			lastActionsResult = input.nextLine();
 			// TODO lastactionresult abprüfen
-			// TODO Bot bleibt hängen wenn er auf anderen trifft.
+			// TODO Bot bleibt hängen wenn er auf anderen trifft! Koordinaten nicht
+			// aktualisieren
 			// TODO wenn er festhängt ab da wo Explorationszahl kleiner als davor ist eine
 			// Gasse
 			// abfragen des Status
-//			switch (lastActionsResult) {
+
+			epsilon = 1 - zieleAufgedeckt / (double) kartenGroesse;
+
+			randomNumber = Math.random();
+
+			aktualsiereStatusMeldungen(input);
+
+			StringBuilder sb = new StringBuilder();
+			sb.append("LastActionResult: " + lastActionsResult + "\nZiele aufgedeckt: " + zieleAufgedeckt + " von "
+					+ kartenGroesse + " Epsilon:" + epsilon + "\nPosition X: " + startX + " Y: " + startY
+					+ " Feldstatus " + karte[startX][startY].getFeldStatus() + " Explorationszahl: "
+					+ karte[startX][startY].getExplorationsZahl() + " Exploitationszahl: "
+					+ karte[startX][startY].getExploitationsZahl() + "\nFloorCount: " + floorCount
+					+ "\nFormulare gefunden: " + countForms + " Von: " + formCount + " Kombinator.meinForm: "
+					+ kombinator.getMeinForm() + " Kombinator.meinFinish: " + kombinator.getMeinFinish()
+					+ "\nSchrittzaehler: " + schrittZaehler + " Hab mich bewegt: " + habeMichBewegt
+					+ "\nExplorationszahl Norden: "
+					+ karte[startX][((startY - 1) + sizeY) % sizeY].getExplorationsZahl() + "\nExplorationszahl Osten: "
+					+ karte[((startX + 1) + sizeX) % sizeX][startY].getExplorationsZahl() + "\nExplorationszahl Süden: "
+					+ karte[startX][((startY + 1) + sizeY) % sizeY].getExplorationsZahl()
+					+ "\nExplorationszahl Westen: "
+					+ karte[((startX - 1) + sizeX) % sizeX][startY].getExplorationsZahl() + "\nExplorationszahl HIER: "
+					+ karte[startX][startY].getExplorationsZahl() + "\nExploitationszahl HIER: "
+					+ karte[startX][startY].getExploitationsZahl() + "\nExploitationszahl Norden: "
+					+ karte[startX][((startY - 1) + sizeY) % sizeY].getExploitationsZahl()
+					+ "\nExploitationszahl Osten: "
+					+ karte[((startX + 1) + sizeX) % sizeX][startY].getExploitationsZahl()
+					+ "\nExploitationszahl Süden: "
+					+ karte[startX][((startY + 1) + sizeY) % sizeY].getExploitationsZahl()
+					+ "\nExploitationszahl Westen: "
+					+ karte[((startX - 1) + sizeX) % sizeX][startY].getExploitationsZahl() + "\nFeldstatus Norden: "
+					+ karte[startX][((startY - 1) + sizeY) % sizeY].getFeldStatus() + "\nFeldstatus Osten: "
+					+ karte[((startX + 1) + sizeX) % sizeX][startY].getFeldStatus() + "\nFeldstatus Süden: "
+					+ karte[startX][((startY + 1) + sizeY) % sizeY].getFeldStatus() + "\nFeldstatus Westen: "
+					+ karte[((startX - 1) + sizeX) % sizeX][startY].getFeldStatus());
+
+			// Debug Information ausgeben (optional möglich)
+			System.err.println(sb.toString());
+
+			switch (lastActionsResult) {
 //			case "NOK BLOCKED":
 //				continue; // hier muss er in andere Richtung weiterlaufen, damit er nicht wiederholt was
 //							// er getan hat
@@ -131,80 +174,56 @@ public class EpsilonGreedyBot {
 //				continue; // hier muss er eigentlich weiterlaufen, damit er nicht wiederholt was er getan
 //							// hat
 //			case "NOK TAKING":
+//				System.out.println("position");
 //				continue;
-//			case "NOK TALKING":
-//				continue;
+			case "NOK TALKING":
+				startX = vorherX;
+				startY = vorherY;
+				System.out.println("position");
+				continue;
 //			case "NOK NOTSUPPORTED":
+//				System.out.println("position");
 //				continue; // hier muss er eigentlich weiter laufen, damit er nicht wiederholt was er getan
 //							// hat
-//			default:
+			default:
 
-			aktualsiereStatusMeldungen(input);
+				// Wo stehe ich?
+				if (steheAufEinemInteressantenFeld()) {
+					habeMichBewegt = false;
+				} else
+				// Habe ich alle Formulare und kenne ich den Weg zum Sachbearbeiter?
 
-			epsilon = 1 - zieleAufgedeckt / (double) kartenGroesse;
-
-			randomNumber = Math.random();
-
-			// Debug Information ausgeben (optional möglich)
-			System.err.println("LastActionResult: " + lastActionsResult + "\nZiele aufgedeckt: " + zieleAufgedeckt
-					+ " von " + kartenGroesse + " Epsilon:" + epsilon + "\nPosition X: " + startX + " Y: " + startY
-					+ " Feldstatus " + karte[startX][startY].getFeldStatus() + " Explorationszahl: "
-					+ karte[startX][startY].getExplorationsZahl() + " Exploitationszahl: "
-					+ karte[startX][startY].getExploitationsZahl() + "\nFloorCount: " + floorCount
-					+ "\nFormulare gefunden: " + countForms + " Von: " + formCount + " Kombinator.meinForm: "
-					+ kombinator.getMeinForm() + " Kombinator.meinFinish: " + kombinator.getMeinFinish()
-					+ "\nSchrittzaehler: " + schrittZaehler + " Hab mich bewegt: " + habeMichBewegt
-					+ "\nExplorationszahl Norden: " + karte[startX][startY - 1].getExplorationsZahl()
-					+ "\nExplorationszahl Osten: " + karte[startX + 1][startY].getExplorationsZahl()
-					+ "\nExplorationszahl Süden: " + karte[startX][startY + 1].getExplorationsZahl()
-					+ "\nExplorationszahl Westen: " + karte[startX - 1][startY].getExplorationsZahl()
-					+ "\nExplorationszahl HIER: " + karte[startX][startY].getExplorationsZahl()
-					+ "\nExploitationszahl HIER: " + karte[startX][startY].getExploitationsZahl()
-					+ "\nExploitationszahl Norden: " + karte[startX][startY - 1].getExploitationsZahl()
-					+ "\nExploitationszahl Osten: " + karte[startX + 1][startY].getExploitationsZahl()
-					+ "\nExploitationszahl Süden: " + karte[startX][startY + 1].getExploitationsZahl()
-					+ "\nExploitationszahl Westen: " + karte[startX - 1][startY].getExploitationsZahl()
-					+ "\nFeldstatus Norden: " + karte[startX][startY - 1].getFeldStatus() + "\nFeldstatus Osten: "
-					+ karte[startX + 1][startY].getFeldStatus() + "\nFeldstatus Süden: "
-					+ karte[startX][startY + 1].getFeldStatus() + "\nFeldstatus Westen: "
-					+ karte[startX - 1][startY].getFeldStatus());
-
-			// Wo stehe ich?
-			if (steheAufEinemInteressantenFeld()) {
-				habeMichBewegt = false;
-			} else
-			// Habe ich alle Formulare und kenne ich den Weg zum Sachbearbeiter?
-
-			if (countForms == formCount && sachbearbeiterGefunden) {
-				direktenWegGehen();
-			}
-
-			else if (randomNumber > epsilon) {
-				// exploitation();
-
-				// if nächstes Ziel bekannt
-
-				// else
-
-				exploration();
-
-			} else {
-				int zaehlen = 0;
-				for (Explorer explorer : queue) {
-					if (explorer.equals(queue.peek())) {
-						zaehlen++;
-					}
+				if (countForms == formCount && sachbearbeiterGefunden) {
+					direktenWegGehen();
 				}
-				if (zaehlen > 1) {
+
+				else if (randomNumber > epsilon) {
 					// exploitation();
+
+					// if nächstes Ziel bekannt
+
+					// else
+
+					exploration();
+
 				} else {
+					int zaehlen = 0;
+					for (Explorer explorer : queue) {
+						if (explorer.equals(queue.peek())) {
+							zaehlen++;
+						}
+					}
+					if (zaehlen > 1) {
+						// exploitation();
+					} else {
+					}
+
+					exploration();
 				}
 
-				exploration();
+				ausgabeValidieren();
+				System.out.println(ausgabe);
 			}
-
-			ausgabeValidieren();
-			System.out.println(ausgabe);
 		}
 	}
 
@@ -212,7 +231,8 @@ public class EpsilonGreedyBot {
 	 * 
 	 */
 	private static void ausgabeValidieren() {
-
+		vorherX = startX;
+		vorherY = startY;
 		switch (ausgabe) {
 		case "go north":
 			startY = ((startY - 1) + sizeY) % sizeY;
