@@ -1,10 +1,14 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class EpsilonGreedyBot {
+
+	private static Queue<Explorer> queue = new LinkedList<>();
 
 	private static Kombinatorik kombinator;
 	private static double epsilon = 1;
@@ -12,6 +16,8 @@ public class EpsilonGreedyBot {
 	private static int playerId;
 	private static int startX;
 	private static int startY;
+	private static int zielX;
+	private static int zielY;
 	private static int kartenGroesse;
 	private static String meinFinish;
 	private static String meinForm;
@@ -32,6 +38,8 @@ public class EpsilonGreedyBot {
 	private static int formCount = -1;
 	private static int countForms = 0;
 	private static boolean habeMichBewegt = false;
+	private static boolean exploitation = false;
+	private static int anzahlSheets = 0;
 
 	private static boolean sachbearbeiterGefunden = false;
 	private static int schrittZaehler = 0;
@@ -63,6 +71,9 @@ public class EpsilonGreedyBot {
 		playerId = input.nextInt(); // id dieses Players / Bots
 		startX = input.nextInt(); // X-Koordinate der Startposition dieses Player
 		startY = input.nextInt(); // Y-Koordinate der Startposition dieses Players
+		if (level == 5) {
+			anzahlSheets = input.nextInt();
+		}
 		input.nextLine(); // Beenden der zweiten Zeile
 
 		kartenGroesse = sizeX * sizeY;
@@ -70,15 +81,46 @@ public class EpsilonGreedyBot {
 		meinFinish = "FINISH " + playerId + " ";
 		meinForm = "FORM " + playerId + " ";
 		karte = new Explorer[sizeX][sizeY];
-		karte[startX][startY] = new Explorer("START", playerId);
+		karte[startX][startY] = new Explorer("FLOOR", playerId, countForms + 1);
 		kombinator = new Kombinatorik(playerId);
 		zieleAufgedeckt++;
+
+		queue.offer(karte[startX][startY]);
 
 	}
 
 	private static void turn(Scanner input) {
 
 		while (input.hasNext()) {
+
+			// Rundeninformationen auslesen
+			lastActionsResult = input.nextLine();
+			// TODO lastactionresult abprüfen
+			// TODO Bot bleibt hängen wenn er auf anderen trifft.
+			// TODO wenn er festhängt ab da wo Explorationszahl kleiner als davor ist eine
+			// Gasse
+			// abfragen des Status
+//			switch (lastActionsResult) {
+//			case "NOK BLOCKED":
+//				continue; // hier muss er in andere Richtung weiterlaufen, damit er nicht wiederholt was
+//							// er getan hat
+//			case "NOK NOTYOURS":
+//				continue; // hier muss er eigentlich weiterlaufen, damit er nicht wiederholt was er getan
+//							// hat
+//			case "NOK EMPTY":
+//				continue; // hier muss er eigentlich weiterlaufen, damit er nicht wiederholt was er getan
+//							// hat
+//			case "NOK WRONGORDER":
+//				continue; // hier muss er eigentlich weiterlaufen, damit er nicht wiederholt was er getan
+//							// hat
+//			case "NOK TAKING":
+//				continue;
+//			case "NOK TALKING":
+//				continue;
+//			case "NOK NOTSUPPORTED":
+//				continue; // hier muss er eigentlich weiter laufen, damit er nicht wiederholt was er getan
+//							// hat
+//			default:
 
 			aktualsiereStatusMeldungen(input);
 
@@ -115,6 +157,7 @@ public class EpsilonGreedyBot {
 				habeMichBewegt = false;
 			} else
 			// Habe ich alle Formulare und kenne ich den Weg zum Sachbearbeiter?
+
 			if (countForms == formCount && sachbearbeiterGefunden) {
 				direktenWegGehen();
 			}
@@ -129,14 +172,22 @@ public class EpsilonGreedyBot {
 				exploration();
 
 			} else {
+				int zaehlen = 0;
+				for (Explorer explorer : queue) {
+					if (explorer.equals(queue.peek())) {
+						zaehlen++;
+					}
+				}
+				if (zaehlen > 1) {
+					// exploitation();
+				} else {
+				}
 
 				exploration();
-
 			}
 
 			ausgabeValidieren();
 			System.out.println(ausgabe);
-
 		}
 	}
 
@@ -156,6 +207,11 @@ public class EpsilonGreedyBot {
 			startX = ((startX - 1) + sizeX) % sizeX;
 			break;
 		default:
+		}
+		queue.offer(karte[startX][startY]);
+
+		if (queue.size() > 5) {
+			queue.poll();
 		}
 
 	}
@@ -185,6 +241,24 @@ public class EpsilonGreedyBot {
 	}
 
 	private static boolean steheAufEinemInteressantenFeld() {
+
+		// TODO sheets kicken Richtung dass Welt unendlich ist %
+		if (karte[startX][startY].getFeldStatus().contains(meinForm) && currentCellStatus.contains("SHEET")) {
+			if (karte[startX][startY - 1].getFeldStatus().contains("FLOOR")) {
+				ausgabe = "kick north";
+			}
+			if (karte[startX + 1][startY].getFeldStatus().contains("FLOOR")) {
+				ausgabe = "kick east";
+			}
+			if (karte[startX][startY + 1].getFeldStatus().contains("FLOOR")) {
+				ausgabe = "kick south";
+			}
+			if (karte[startX - 1][startY].getFeldStatus().contains("FLOOR")) {
+				ausgabe = "kick west";
+			}
+			return true;
+		} else
+
 		// Stehe ich auf einem Finish? (IMPLIZIERT, dass ich alle Formulare habe)
 		if (currentCellStatus.contains(meinFinish + formCount)) {
 
@@ -203,22 +277,9 @@ public class EpsilonGreedyBot {
 
 		{
 			ausgabe = "take";
-			karte[startX][startY].setFeldStatus("FLOOR");
+			karte[startX][startY].setFeldStatus("FLOOR", playerId);
 			countForms++;
 			kombinator.setMeinForm(meinForm + (countForms + 1));
-
-//			if (countForms == formCount) {
-//				for (int i = 0; i < karte.length; i++) {
-//					for (int j = 0; j < karte[i].length; j++) {
-//
-//						if (karte[i][j] != null && karte[i][j].getFeldStatus().contains(meinFinish)) {
-//							karte[i][j].setExplorationsZahl(6);
-//
-//						}
-//
-//					}
-//				}
-//			}
 
 			return true;
 
@@ -227,7 +288,17 @@ public class EpsilonGreedyBot {
 //		else if (currentCellStatus.equals("FLOOR !")) {
 //			ausgabe = "position";
 //			return true;
-//		}
+//		} 
+		else if (currentCellStatus.contains("FORM") && anzahlSheets > 0)
+
+		{
+
+			ausgabe = "put";
+			anzahlSheets--;
+
+			return true;
+
+		}
 		return false;
 	}
 
@@ -241,37 +312,46 @@ public class EpsilonGreedyBot {
 		tempCellStati.clear();
 		floorCount = 0;
 
-		// Rundeninformationen auslesen
-		lastActionsResult = input.nextLine();
 		currentCellStatus = input.nextLine();
 
-		// TODO was wenn Objekt auf anderen Seite des Spielfelds liegt?
-		// TODO Feldaktualisierung falls jemand mein Formular kickt!!! --> Sich also die
-		// position ändert?
-		// ((x + richtung) + breite) % breite;
+		// Status aktualisieren
+		// Existiert er oder hat sich Position geändert?
+
 		// Norden
 		northCellStatus = input.nextLine();
 		if (karte[startX][((startY - 1) + sizeY) % sizeY] == null) {
-			karte[startX][((startY - 1) + sizeY) % sizeY] = new Explorer(northCellStatus, playerId);
+			karte[startX][((startY - 1) + sizeY) % sizeY] = new Explorer(northCellStatus, playerId, countForms + 1);
 			zieleAufgedeckt++;
 
+		} else if (!karte[startX][((startY - 1) + sizeY) % sizeY].getFeldStatus().equals(northCellStatus)) {
+			karte[startX][((startY - 1) + sizeY) % sizeY].setFeldStatus(northCellStatus, playerId);
 		}
+
 		// Osten
 		eastCellStatus = input.nextLine();
 		if (karte[((startX + 1) + sizeX) % sizeX][startY] == null) {
-			karte[((startX + 1) + sizeX) % sizeX][startY] = new Explorer(eastCellStatus, playerId);
+			karte[((startX + 1) + sizeX) % sizeX][startY] = new Explorer(eastCellStatus, playerId, countForms + 1);
 			zieleAufgedeckt++;
 
+		} else if (!karte[((startX + 1) + sizeX) % sizeX][startY].getFeldStatus().equals(eastCellStatus)) {
+			karte[((startX + 1) + sizeX) % sizeX][startY].setFeldStatus(eastCellStatus, playerId);
 		}
+
 		southCellStatus = input.nextLine();
 		if (karte[startX][((startY + 1) + sizeY) % sizeY] == null) {
-			karte[startX][((startY + 1) + sizeY) % sizeY] = new Explorer(southCellStatus, playerId);
+			karte[startX][((startY + 1) + sizeY) % sizeY] = new Explorer(southCellStatus, playerId, countForms + 1);
 			zieleAufgedeckt++;
+		} else if (!karte[startX][((startY + 1) + sizeY) % sizeY].getFeldStatus().equals(southCellStatus)) {
+			karte[startX][((startY + 1) + sizeY) % sizeY].setFeldStatus(southCellStatus, playerId);
 		}
+
 		westCellStatus = input.nextLine();
 		if (karte[((startX - 1) + sizeX) % sizeX][startY] == null) {
-			karte[((startX - 1) + sizeX) % sizeX][startY] = new Explorer(westCellStatus, playerId);
+			karte[((startX - 1) + sizeX) % sizeX][startY] = new Explorer(westCellStatus, playerId, countForms + 1);
 			zieleAufgedeckt++;
+
+		} else if (!karte[((startX - 1) + sizeX) % sizeX][startY].getFeldStatus().equals(westCellStatus)) {
+			karte[((startX - 1) + sizeX) % sizeX][startY].setFeldStatus(westCellStatus, playerId);
 		}
 
 		cellStati.add(northCellStatus + " norden");
@@ -285,7 +365,7 @@ public class EpsilonGreedyBot {
 
 				tempCellStati.add(currentCellStatus);
 				floorCount++;
-				if (currentCellStatus.contains(meinFinish)) {
+				if (currentCellStatus.contains("FINISH")) {
 					String[] partsF = currentCellStatus.split(" ");
 
 					String lastDigitF = partsF[2];
@@ -298,7 +378,10 @@ public class EpsilonGreedyBot {
 		}
 
 		karte[startX][startY].setExplorationsZahl(floorCount);
-		if (sachbearbeiterGefunden && habeMichBewegt && formCount != countForms) {
+
+		// Abgleich wie viele Formulare hab ich also zum Beispiel es fehlt nur noch
+		// ein Formular
+		if (sachbearbeiterGefunden && habeMichBewegt && formCount == countForms + 1) {
 			schrittZaehler++;
 			karte[startX][startY].setExploitationsZahl(schrittZaehler);
 		}
@@ -331,8 +414,69 @@ public class EpsilonGreedyBot {
 
 	}
 
-	private static void exploitation() {
+	private static boolean exploitation(boolean binAufDemWeg, int zielX, int zielY) {
+
 		// TODO Ich bin bisher nur ein dummer Bot der keine Strategie hat
+		Knoten[] alleKnoten = new Knoten[sizeX * sizeY];
+		Knoten startknoten = null;
+		Knoten zielknoten = null;
+		int anzahlknoten = 0;
+
+		for (int i = 0; i < sizeX; i++) {
+			for (int j = 0; j < sizeY; j++) {
+				if (startX == i && startY == j) {
+					alleKnoten[anzahlknoten] = new Knoten(karte[i][j].getFeldStatus(), i, j, true, false);
+					startknoten = alleKnoten[anzahlknoten];
+				} else if (zielX == i && zielY == j) {
+					alleKnoten[anzahlknoten] = new Knoten(karte[i][j].getFeldStatus(), i, j, false, true);
+					zielknoten = alleKnoten[anzahlknoten];
+				} else
+					alleKnoten[anzahlknoten] = new Knoten(karte[i][j].getFeldStatus(), i, j, false, false);
+
+			}
+		}
+
+		Algorithmus d = new Algorithmus(startknoten, zielknoten);
+		int anzahlZuege = d.getErgebnisReihenfolge().size();
+
+		// Ziel bekannt
+
+		// Ziel unbekannt
+		if (!binAufDemWeg) {
+			for (int i = 0; i < sizeX; i++) {
+				for (int j = 0; j < sizeY; j++) {
+					if (karte[i][j] != null && !karte[i][j].getFeldStatus().contains("WALL")) {
+						zielX = i;
+						zielY = j;
+						break;
+					}
+				}
+			}
+			binAufDemWeg = true;
+		} else {
+			// nach Osten gehen
+
+			if (zielX > startX) {
+				if (!eastCellStatus.equals("WALL")) {
+					ausgabe = "go east";
+				}
+			} else if (!westCellStatus.equals("WALL")) {
+				ausgabe = "go west";
+			}
+
+			if (zielY > startY) {
+				if (!southCellStatus.equals("WALL")) {
+					ausgabe = "go south";
+				}
+
+			} else {
+				if (!northCellStatus.equals("WALL")) {
+					ausgabe = "go north";
+				}
+			}
+		}
+
+		return binAufDemWeg;
 
 	}
 

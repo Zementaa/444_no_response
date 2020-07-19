@@ -21,24 +21,27 @@ public class Explorer {
 	private int exploitationsZahl;
 	private String feldStatus;
 
-	public Explorer(String feldStatus, int playerId) {
+	public Explorer(String feldStatus, int playerId, int countForms) {
 		super();
 
 		this.exploitationsZahl = 696969;
 
+		// Wände
 		if (feldStatus.equals("WALL")) {
 			this.explorationsZahl = 0;
 			this.exploitationsZahl = 999999;
 		} else
-		// TODO passendes Form
-		if (feldStatus.contains("FORM " + playerId)) {
+		// Passendes Formular
+		if (feldStatus.contains("FORM " + playerId + " " + countForms)) {
 			this.explorationsZahl = 7;
 		} else
-		// Finish
+		// Sachbearbeiter
 		if (feldStatus.contains("FINISH " + playerId)) {
 			this.exploitationsZahl = 0;
 			this.explorationsZahl = 6;
-		} else {
+		}
+		// Alles andere
+		else {
 			this.explorationsZahl = 5;
 
 		}
@@ -65,7 +68,15 @@ public class Explorer {
 		return feldStatus;
 	}
 
-	public void setFeldStatus(String feldStatus) {
+	public void setFeldStatus(String feldStatus, int playerId) {
+
+		if (feldStatus.contains("FORM " + playerId)) {
+			this.explorationsZahl = 7;
+
+		} else {
+			this.explorationsZahl = 5;
+
+		}
 		this.feldStatus = feldStatus;
 	}
 

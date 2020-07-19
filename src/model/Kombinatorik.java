@@ -29,6 +29,7 @@ public class Kombinatorik {
 		// Nur eine Reihenfolge wie die Daten hereinkommen, deshalb keine Unterscheidung
 		// in verschiedene Fälle
 
+		// TODO was wenn Objekt auf anderen Seite des Spielfelds liegt?
 		int nordenZahl = karte[startX][startY - 1].getExplorationsZahl();
 		int ostenZahl = karte[startX + 1][startY].getExplorationsZahl();
 		int suedenZahl = karte[startX][startY + 1].getExplorationsZahl();
