@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
+/**
+ * 
+ * @author Zementa
+ *
+ */
 public class EpsilonGreedyBot {
 
 	private static Queue<Explorer> queue = new LinkedList<>();
@@ -44,6 +49,10 @@ public class EpsilonGreedyBot {
 	private static boolean sachbearbeiterGefunden = false;
 	private static int schrittZaehler = 0;
 
+	/**
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		// Scanner zum Auslesen der Standardeingabe, welche Initialisierungs- und
@@ -61,6 +70,10 @@ public class EpsilonGreedyBot {
 
 	}
 
+	/**
+	 * 
+	 * @param input
+	 */
 	private static void init(Scanner input) {
 		// 1. Zeile: Maze Infos
 		sizeX = input.nextInt(); // X-Groesse des Spielfeldes (Breite)
@@ -89,6 +102,10 @@ public class EpsilonGreedyBot {
 
 	}
 
+	/**
+	 * 
+	 * @param input
+	 */
 	private static void turn(Scanner input) {
 
 		while (input.hasNext()) {
@@ -191,6 +208,9 @@ public class EpsilonGreedyBot {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	private static void ausgabeValidieren() {
 
 		switch (ausgabe) {
@@ -216,6 +236,9 @@ public class EpsilonGreedyBot {
 
 	}
 
+	/**
+	 * 
+	 */
 	private static void direktenWegGehen() {
 
 		int exploitationszahlHier = karte[startX][startY].getExploitationsZahl();
@@ -240,6 +263,10 @@ public class EpsilonGreedyBot {
 
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	private static boolean steheAufEinemInteressantenFeld() {
 
 		// TODO sheets kicken Richtung dass Welt unendlich ist %
@@ -302,6 +329,10 @@ public class EpsilonGreedyBot {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param input
+	 */
 	private static void aktualsiereStatusMeldungen(Scanner input) {
 
 		// TODO prüfe Warteschlange auf doppelte Werte
@@ -388,6 +419,9 @@ public class EpsilonGreedyBot {
 
 	}
 
+	/**
+	 * 
+	 */
 	private static void exploration() {
 
 		switch (floorCount) {
@@ -414,6 +448,13 @@ public class EpsilonGreedyBot {
 
 	}
 
+	/**
+	 * 
+	 * @param binAufDemWeg
+	 * @param zielX
+	 * @param zielY
+	 * @return
+	 */
 	private static boolean exploitation(boolean binAufDemWeg, int zielX, int zielY) {
 
 		// TODO Ich bin bisher nur ein dummer Bot der keine Strategie hat

@@ -1,5 +1,10 @@
 package model;
 
+/**
+ * 
+ * @author
+ *
+ */
 public class Explorer {
 	// Explorationszahl: Jedes Feld wird mit einer Wertigkeit initialisiert
 	// WALL=0 (wertlos)
