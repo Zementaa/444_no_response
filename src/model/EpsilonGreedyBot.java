@@ -31,7 +31,10 @@ public class EpsilonGreedyBot {
 	private static int floorCount;
 	private static int formCount = -1;
 	private static int countForms = 0;
-//	private static boolean sachbearbeiterGefunden = false;
+	private static boolean habeMichBewegt = false;
+
+	private static boolean sachbearbeiterGefunden = false;
+	private static int schrittZaehler = 0;
 
 	public static void main(String[] args) {
 
@@ -91,10 +94,13 @@ public class EpsilonGreedyBot {
 					+ karte[startX][startY].getExploitationsZahl() + "\nFloorCount: " + floorCount
 					+ "\nFormulare gefunden: " + countForms + " Von: " + formCount + " Kombinator.meinForm: "
 					+ kombinator.getMeinForm() + " Kombinator.meinFinish: " + kombinator.getMeinFinish()
+					+ "\nSchrittzaehler: " + schrittZaehler + " Hab mich bewegt: " + habeMichBewegt
 					+ "\nExplorationszahl Norden: " + karte[startX][startY - 1].getExplorationsZahl()
 					+ "\nExplorationszahl Osten: " + karte[startX + 1][startY].getExplorationsZahl()
 					+ "\nExplorationszahl Süden: " + karte[startX][startY + 1].getExplorationsZahl()
 					+ "\nExplorationszahl Westen: " + karte[startX - 1][startY].getExplorationsZahl()
+					+ "\nExplorationszahl HIER: " + karte[startX][startY].getExplorationsZahl()
+					+ "\nExploitationszahl HIER: " + karte[startX][startY].getExploitationsZahl()
 					+ "\nExploitationszahl Norden: " + karte[startX][startY - 1].getExploitationsZahl()
 					+ "\nExploitationszahl Osten: " + karte[startX + 1][startY].getExploitationsZahl()
 					+ "\nExploitationszahl Süden: " + karte[startX][startY + 1].getExploitationsZahl()
@@ -104,54 +110,116 @@ public class EpsilonGreedyBot {
 					+ karte[startX][startY + 1].getFeldStatus() + "\nFeldstatus Westen: "
 					+ karte[startX - 1][startY].getFeldStatus());
 
-			if (randomNumber > epsilon) {
-				// exploitation();
-				if (steheAufEinemInteressantenFeld()) {
-
-				} else {
-					exploration();
-				}
-			} else {
-
-				// Wo befinde ich mich momentan eig?
-				if (steheAufEinemInteressantenFeld()) {
-
-				} else {
-					exploration();
-				}
+			// Wo stehe ich?
+			if (steheAufEinemInteressantenFeld()) {
+				habeMichBewegt = false;
+			} else
+			// Habe ich alle Formulare und kenne ich den Weg zum Sachbearbeiter?
+			if (countForms == formCount && sachbearbeiterGefunden) {
+				direktenWegGehen();
 			}
 
+			else if (randomNumber > epsilon) {
+				// exploitation();
+
+				// if nächstes Ziel bekannt
+
+				// else
+
+				exploration();
+
+			} else {
+
+				exploration();
+
+			}
+
+			ausgabeValidieren();
 			System.out.println(ausgabe);
 
 		}
 	}
 
+	private static void ausgabeValidieren() {
+
+		switch (ausgabe) {
+		case "go north":
+			startY = ((startY - 1) + sizeY) % sizeY;
+			break;
+		case "go east":
+			startX = ((startX + 1) + sizeX) % sizeX;
+			break;
+		case "go south":
+			startY = ((startY + 1) + sizeY) % sizeY;
+			break;
+		case "go west":
+			startX = ((startX - 1) + sizeX) % sizeX;
+			break;
+		default:
+		}
+
+	}
+
+	private static void direktenWegGehen() {
+
+		int exploitationszahlHier = karte[startX][startY].getExploitationsZahl();
+		// Norden
+		if (karte[startX][startY - 1].getExploitationsZahl() == (exploitationszahlHier - 1)) {
+			ausgabe = "go north";
+		} else
+
+		// Osten
+		if (karte[startX + 1][startY].getExploitationsZahl() == (exploitationszahlHier - 1)) {
+			ausgabe = "go east";
+		} else
+
+		// Sueden
+		if (karte[startX][startY + 1].getExploitationsZahl() == (exploitationszahlHier - 1)) {
+			ausgabe = "go south";
+		}
+
+		// Westen
+		else
+			ausgabe = "go west";
+
+	}
+
 	private static boolean steheAufEinemInteressantenFeld() {
 		// Stehe ich auf einem Finish? (IMPLIZIERT, dass ich alle Formulare habe)
-		if (currentCellStatus.contains(meinFinish + formCount) && (countForms == formCount)) {
-			ausgabe = "finish";
-			return true;
+		if (currentCellStatus.contains(meinFinish + formCount)) {
+
+			sachbearbeiterGefunden = true;
+
+			if (countForms == formCount) {
+				ausgabe = "finish";
+
+				return true;
+			}
 
 		}
 		// Stehe ich auf einem Formular? (IMPLIZIERT, dass ich dieses Formular als
 		// nächstes brauche)
-		else if (currentCellStatus.contains(meinForm + (countForms + 1))) {
+		else if (currentCellStatus.contains(meinForm + (countForms + 1)))
+
+		{
 			ausgabe = "take";
 			karte[startX][startY].setFeldStatus("FLOOR");
 			countForms++;
 			kombinator.setMeinForm(meinForm + (countForms + 1));
 
-			if (countForms == formCount) {
-				for (int i = 0; i < karte.length; i++) {
-					for (int j = 0; j < karte[i].length; j++) {
+//			if (countForms == formCount) {
+//				for (int i = 0; i < karte.length; i++) {
+//					for (int j = 0; j < karte[i].length; j++) {
+//
+//						if (karte[i][j] != null && karte[i][j].getFeldStatus().contains(meinFinish)) {
+//							karte[i][j].setExplorationsZahl(6);
+//
+//						}
+//
+//					}
+//				}
+//			}
 
-						if (karte[i][j] != null && karte[i][j].getFeldStatus().contains(meinFinish)) {
-							karte[i][j].setExplorationsZahl(6);
-						}
-
-					}
-				}
-			}
 			return true;
 
 		}
@@ -181,46 +249,28 @@ public class EpsilonGreedyBot {
 		// TODO Feldaktualisierung falls jemand mein Formular kickt!!! --> Sich also die
 		// position ändert?
 		// ((x + richtung) + breite) % breite;
+		// Norden
 		northCellStatus = input.nextLine();
-		if (startY == 0) {
-			if (karte[startX][sizeY] == null) {
-				karte[startX][sizeY] = new Explorer(northCellStatus, playerId);
-				zieleAufgedeckt++;
-			}
-		} else if (karte[startX][startY - 1] == null) {
-			karte[startX][startY - 1] = new Explorer(northCellStatus, playerId);
+		if (karte[startX][((startY - 1) + sizeY) % sizeY] == null) {
+			karte[startX][((startY - 1) + sizeY) % sizeY] = new Explorer(northCellStatus, playerId);
 			zieleAufgedeckt++;
 
 		}
+		// Osten
 		eastCellStatus = input.nextLine();
-		if (startX == sizeX) {
-			if (karte[0][startY] == null) {
-				karte[0][startY] = new Explorer(eastCellStatus, playerId);
-				zieleAufgedeckt++;
-			}
-		} else if (karte[startX + 1][startY] == null) {
-			karte[startX + 1][startY] = new Explorer(eastCellStatus, playerId);
+		if (karte[((startX + 1) + sizeX) % sizeX][startY] == null) {
+			karte[((startX + 1) + sizeX) % sizeX][startY] = new Explorer(eastCellStatus, playerId);
 			zieleAufgedeckt++;
 
 		}
 		southCellStatus = input.nextLine();
-		if (startY == sizeY) {
-			if (karte[startX][0] == null) {
-				karte[startX][0] = new Explorer(southCellStatus, playerId);
-				zieleAufgedeckt++;
-			}
-		} else if (karte[startX][startY + 1] == null) {
-			karte[startX][startY + 1] = new Explorer(southCellStatus, playerId);
+		if (karte[startX][((startY + 1) + sizeY) % sizeY] == null) {
+			karte[startX][((startY + 1) + sizeY) % sizeY] = new Explorer(southCellStatus, playerId);
 			zieleAufgedeckt++;
 		}
 		westCellStatus = input.nextLine();
-		if (startX == 0) {
-			if (karte[sizeX][startY] == null) {
-				karte[sizeX][startY] = new Explorer(westCellStatus, playerId);
-				zieleAufgedeckt++;
-			}
-		} else if (karte[startX - 1][startY] == null) {
-			karte[startX - 1][startY] = new Explorer(westCellStatus, playerId);
+		if (karte[((startX - 1) + sizeX) % sizeX][startY] == null) {
+			karte[((startX - 1) + sizeX) % sizeX][startY] = new Explorer(westCellStatus, playerId);
 			zieleAufgedeckt++;
 		}
 
@@ -232,9 +282,7 @@ public class EpsilonGreedyBot {
 		// Bewegungsfelder zaehlen
 		for (String currentCellStatus : cellStati) {
 			if (!currentCellStatus.contains("WALL")) {
-				if (currentCellStatus.contains(meinFinish)) {
 
-				}
 				tempCellStati.add(currentCellStatus);
 				floorCount++;
 				if (currentCellStatus.contains(meinFinish)) {
@@ -250,18 +298,10 @@ public class EpsilonGreedyBot {
 		}
 
 		karte[startX][startY].setExplorationsZahl(floorCount);
-
-		// TODO Ich weiss nicht ob ich alle habe wenn ich den Bearbeiter noch nicht
-		// gefunden habe
-//		if (countForms == formCount && sachbearbeiterGefunden) {
-//			for (int i = 0; i < karte.length; i++) {
-//				for (int j = 0; j < karte[i].length; j++) {
-//					if (karte[i][j] != null && karte[i][j].getFeldStatus().contains(meinFinish)) {
-//						karte[i][j].setExplorationsZahl(6);
-//					}
-//				}
-//			}
-//		}
+		if (sachbearbeiterGefunden && habeMichBewegt && formCount != countForms) {
+			schrittZaehler++;
+			karte[startX][startY].setExploitationsZahl(schrittZaehler);
+		}
 
 	}
 
@@ -287,29 +327,7 @@ public class EpsilonGreedyBot {
 					tempCellStati.get(2), tempCellStati.get(3), karte, startX, startY);
 		}
 
-		if (ausgabe.equals("go south")) {
-			if (startY == sizeY) {
-				startY = 0;
-			} else
-				startY += 1;
-		} else if (ausgabe.equals("go east")) {
-			if (startX == sizeX) {
-				startX = 0;
-			} else
-				startX += 1;
-		} else if (ausgabe.equals("go west")) {
-			if (startX == 0) {
-				startX = sizeX;
-			} else
-				startX -= 1;
-
-		} else {
-
-			if (startY == 0) {
-				startY = sizeY;
-			} else
-				startY -= 1;
-		}
+		habeMichBewegt = true;
 
 	}
 

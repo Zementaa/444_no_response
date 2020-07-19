@@ -33,6 +33,11 @@ public class Explorer {
 		// TODO passendes Form
 		if (feldStatus.contains("FORM " + playerId)) {
 			this.explorationsZahl = 7;
+		} else
+		// Finish
+		if (feldStatus.contains("FINISH " + playerId)) {
+			this.exploitationsZahl = 0;
+			this.explorationsZahl = 6;
 		} else {
 			this.explorationsZahl = 5;
 

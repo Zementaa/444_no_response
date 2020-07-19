@@ -3,11 +3,13 @@ package model;
 import java.util.Random;
 
 public class Kombinatorik {
-	private final String norden = "norden";
-	private final String sueden = "sueden";
-	private final String westen = "westen";
-	private final String osten = "osten";
-	private final String gehNachNorden = "go north";
+
+	// TODO Eingang zu "Höhle" merken
+	private static final String NORDEN = "norden";
+	private static final String sueden = "sueden";
+	private static final String westen = "westen";
+	private static final String osten = "osten";
+	private static final String GEH_NACH_NORDEN = "go north";
 	private final String gehNachSueden = "go south";
 	private final String gehNachWesten = "go west";
 	private final String gehNachOsten = "go east";
@@ -27,102 +29,140 @@ public class Kombinatorik {
 	public String moeglichkeitenBerechnen(String eins, String zwei, String drei, String vier, Explorer[][] karte,
 			int startX, int startY) {
 		// Nur eine Reihenfolge wie die Daten hereinkommen, deshalb keine Unterscheidung
-		// in verschiedene FÃ¤lle
+		// in verschiedene Fälle
 
 		int nordenZahl = karte[startX][startY - 1].getExplorationsZahl();
 		int ostenZahl = karte[startX + 1][startY].getExplorationsZahl();
 		int suedenZahl = karte[startX][startY + 1].getExplorationsZahl();
 		int westenZahl = karte[startX - 1][startY].getExplorationsZahl();
 
-		String[] einsZweiDreiVier = { gehNachNorden, gehNachOsten, gehNachSueden, gehNachWesten };
+		String[] einsZweiDreiVier = { GEH_NACH_NORDEN, gehNachOsten, gehNachSueden, gehNachWesten };
 
 		int zufallsZahl4 = zufall.nextInt(3);
 		int zufallsZahl3 = zufall.nextInt(2);
 
-		// 1 MÃ¶glichkeit: Norden, Osten, SÃ¼den, Westen
+		// 1 Möglichkeit: Norden, Osten, Süden, Westen
 
 		// Jede Zahl gleich
 		if (nordenZahl == ostenZahl && nordenZahl == suedenZahl && nordenZahl == westenZahl) {
 
 			ausgabe = einsZweiDreiVier[zufallsZahl4];
 		} else
-		// Eine grÃ¶ÃŸte Zahl
+		// Eine größte Zahl
 
-		// Norden am grÃ¶ÃŸten
+		// Norden am größten
 		if (nordenZahl > ostenZahl && nordenZahl > suedenZahl && nordenZahl > westenZahl) {
-			ausgabe = gehNachNorden;
+			ausgabe = GEH_NACH_NORDEN;
 		} else
 
-		// Osten am grÃ¶ÃŸten
+		// Osten am größten
 		if (ostenZahl > nordenZahl && ostenZahl > suedenZahl && ostenZahl > westenZahl) {
 			ausgabe = gehNachOsten;
 		} else
 
-		// SÃ¼den am grÃ¶ÃŸten
+		// Süden am größten
 		if (suedenZahl > nordenZahl && suedenZahl > ostenZahl && suedenZahl > westenZahl) {
 			ausgabe = gehNachSueden;
 		} else
 
-		// Westen am grÃ¶ÃŸten
+		// Westen am größten
 		if (westenZahl > nordenZahl && westenZahl > suedenZahl && westenZahl > ostenZahl) {
 			ausgabe = gehNachWesten;
 		} else
 
-		// Zwei grÃ¶ÃŸte Zahlen
-		// TODO Ã¼berprÃ¼fen: Was wenn er in einem "Block" gefangen ist weil dieser nur
+		// Zwei größte Zahlen
+		// TODO überprüfen: Was wenn er in einem "Block" gefangen ist weil dieser nur
 		// Umfelder mit der selben zahl hat
 		// Letzte zehn IDs mitschreiben --> 3 Wiederholungen
-		// Ãœberlegung: Warteschlange mit 5 Feldern, nach zwei Wdh. verlassen
-		// Norden und Osten die zwei grÃ¶ÃŸten
+		// Überlegung: Warteschlange mit 5 Feldern, nach zwei Wdh. verlassen
+		// Norden und Osten die zwei größten
 		if (nordenZahl == ostenZahl && nordenZahl > suedenZahl && nordenZahl > westenZahl) {
-			richtung4(zufallsZahl4, gehNachOsten, gehNachNorden);
+			if (zufallsZahl4 % 2 == 0) {
+				ausgabe = gehNachOsten;
+			} else
+				ausgabe = GEH_NACH_NORDEN;
 		} else
 
-		// Norden und Westen die zwei grÃ¶ÃŸten
+		// Norden und Westen die zwei größten
 		if (nordenZahl == westenZahl && nordenZahl > suedenZahl && nordenZahl > ostenZahl) {
-			richtung4(zufallsZahl4, gehNachWesten, gehNachNorden);
+			if (zufallsZahl4 % 2 == 0) {
+				ausgabe = gehNachWesten;
+			} else
+				ausgabe = GEH_NACH_NORDEN;
 		} else
 
-		// Norden und SÃ¼den die zwei grÃ¶ÃŸten
+		// Norden und Süden die zwei größten
 		if (nordenZahl == suedenZahl && nordenZahl > ostenZahl && nordenZahl > westenZahl) {
-			richtung4(zufallsZahl4, gehNachSueden, gehNachNorden);
+			if (zufallsZahl4 % 2 == 0) {
+				ausgabe = gehNachSueden;
+			} else
+				ausgabe = GEH_NACH_NORDEN;
 		} else
 
-		// Osten und SÃ¼den die zwei grÃ¶ÃŸten
+		// Osten und Süden die zwei größten
 		if (suedenZahl == ostenZahl && suedenZahl > nordenZahl && suedenZahl > westenZahl) {
-			richtung4(zufallsZahl4, gehNachOsten, gehNachSueden);
+			if (zufallsZahl4 % 2 == 0) {
+				ausgabe = gehNachOsten;
+			} else
+				ausgabe = gehNachSueden;
 		} else
-		// Osten und Westen die zwei grÃ¶ÃŸten
+		// Osten und Westen die zwei größten
 		if (westenZahl == ostenZahl && westenZahl > suedenZahl && westenZahl > nordenZahl) {
-			richtung4(zufallsZahl4, gehNachOsten, gehNachWesten);
+			if (zufallsZahl4 % 2 == 0) {
+				ausgabe = gehNachOsten;
+			} else
+				ausgabe = gehNachWesten;
 		} else
 
-		// SÃ¼den und Westen die zwei grÃ¶ÃŸten
+		// Süden und Westen die zwei größten
 		if (suedenZahl == westenZahl && suedenZahl > nordenZahl && suedenZahl > ostenZahl) {
-			richtung4(zufallsZahl4, gehNachSueden, gehNachWesten);
+			if (zufallsZahl4 % 2 == 0) {
+				ausgabe = gehNachSueden;
+			} else
+				ausgabe = gehNachWesten;
 		} else
 
-		// Drei grÃ¶ÃŸte Zahlen - eine kleiner und alle anderen gleich
+		// Drei größte Zahlen - eine kleiner und alle anderen gleich
 		// Norden am kleinsten
-		// TODO Ã¼berprÃ¼fen
+		// TODO überprüfen
 
 		if (nordenZahl < ostenZahl && ostenZahl == suedenZahl && ostenZahl == westenZahl) {
-			richtung3(zufallsZahl3, gehNachSueden, gehNachOsten, gehNachWesten);
+			if (zufallsZahl3 == 0) {
+				ausgabe = gehNachSueden;
+			} else if (zufallsZahl3 == 1) {
+				ausgabe = gehNachOsten;
+			} else
+				ausgabe = gehNachWesten;
 		} else
 
 		// Osten am kleinsten
 		if (ostenZahl < nordenZahl && nordenZahl == suedenZahl && nordenZahl == westenZahl) {
-			richtung3(zufallsZahl3, gehNachSueden, gehNachNorden, gehNachWesten);
+			if (zufallsZahl3 == 0) {
+				ausgabe = gehNachSueden;
+			} else if (zufallsZahl3 == 1) {
+				ausgabe = GEH_NACH_NORDEN;
+			} else
+				ausgabe = gehNachWesten;
 		} else
 
-		// SÃ¼den am kleinsten
+		// Süden am kleinsten
 		if (suedenZahl < nordenZahl && nordenZahl == ostenZahl && nordenZahl == westenZahl) {
-			richtung3(zufallsZahl3, gehNachNorden, gehNachOsten, gehNachWesten);
+			if (zufallsZahl3 == 0) {
+				ausgabe = GEH_NACH_NORDEN;
+			} else if (zufallsZahl3 == 1) {
+				ausgabe = gehNachOsten;
+			} else
+				ausgabe = gehNachWesten;
 		} else
 
 		// Westen am kleinsten
 		if (westenZahl < nordenZahl && nordenZahl == suedenZahl && nordenZahl == ostenZahl) {
-			richtung3(zufallsZahl3, gehNachSueden, gehNachOsten, gehNachNorden);
+			if (zufallsZahl3 == 0) {
+				ausgabe = gehNachSueden;
+			} else if (zufallsZahl3 == 1) {
+				ausgabe = gehNachOsten;
+			} else
+				ausgabe = GEH_NACH_NORDEN;
 		}
 		return this.ausgabe;
 	}
@@ -168,137 +208,194 @@ public class Kombinatorik {
 //			}
 //		} else
 
-		// 4 MÃ¶glichkeiten
+		// 4 Möglichkeiten
 
-		// Norden Osten SÃ¼den
-		if (lastWordEins.equals(norden) && lastWordZwei.equals(osten) && lastWordDrei.equals(sueden)) {
+		// Norden Osten Süden
+		if (lastWordEins.equals(NORDEN) && lastWordZwei.equals(osten) && lastWordDrei.equals(sueden)) {
 			// Gleiche Explorationszahl
 			if (nordenZahl == ostenZahl && nordenZahl == suedenZahl) {
-				richtung3(zufallsZahl3, gehNachSueden, gehNachOsten, gehNachNorden);
+				if (zufallsZahl3 == 0) {
+					ausgabe = gehNachSueden;
+				} else if (zufallsZahl3 == 1) {
+					ausgabe = gehNachOsten;
+				} else
+					ausgabe = GEH_NACH_NORDEN;
 			} else
-			// Norden am grÃ¶ÃŸten
+			// Norden am größten
 			if (nordenZahl > ostenZahl && nordenZahl > suedenZahl) {
 
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			} else
-			// Osten am grÃ¶ÃŸten
+			// Osten am größten
 			if (ostenZahl > nordenZahl && ostenZahl > suedenZahl) {
 				ausgabe = gehNachOsten;
 			} else
-			// SÃ¼den am grÃ¶ÃŸten
+			// Süden am größten
 			if (suedenZahl > ostenZahl && suedenZahl > nordenZahl) {
 				ausgabe = gehNachSueden;
 			} else
-			// Norden und Osten gleich aber grÃ¶ÃŸer als SÃ¼den
+			// Norden und Osten gleich aber größer als Süden
 			if (nordenZahl == ostenZahl && nordenZahl > suedenZahl) {
-				richtung2(zufallsZahl2, gehNachOsten, gehNachNorden);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachOsten;
+				} else
+					ausgabe = GEH_NACH_NORDEN;
 			} else
-			// Norden und SÃ¼den gleich aber grÃ¶ÃŸer als Osten
+			// Norden und Süden gleich aber größer als Osten
 			if (nordenZahl == suedenZahl && nordenZahl > ostenZahl) {
-				richtung2(zufallsZahl2, gehNachSueden, gehNachNorden);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachSueden;
+				} else
+					ausgabe = GEH_NACH_NORDEN;
 			} else
-			// SÃ¼den und Osten gleich aber grÃ¶ÃŸer als Norden
+			// Süden und Osten gleich aber größer als Norden
 			if (suedenZahl > ostenZahl && ostenZahl > nordenZahl) {
-				richtung2(zufallsZahl2, gehNachOsten, gehNachSueden);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachOsten;
+				} else
+					ausgabe = gehNachSueden;
 			}
 			return ausgabe;
 		}
 
-		// TODO Methode mit sechs Ãœbergabeparameter
+		// TODO Methode mit sechs Übergabeparameter
 		// Norden Osten Westen
-		if (lastWordEins.equals(norden) && lastWordZwei.equals(osten) && lastWordDrei.equals(westen)) {
+		if (lastWordEins.equals(NORDEN) && lastWordZwei.equals(osten) && lastWordDrei.equals(westen)) {
 			// Gleiche Explorationszahl
 			if (nordenZahl == ostenZahl && nordenZahl == westenZahl) {
-				richtung3(zufallsZahl3, gehNachWesten, gehNachOsten, gehNachNorden);
+				if (zufallsZahl3 == 0) {
+					ausgabe = gehNachWesten;
+				} else if (zufallsZahl3 == 1) {
+					ausgabe = gehNachOsten;
+				} else
+					ausgabe = GEH_NACH_NORDEN;
 			} else
-			// Norden am grÃ¶ÃŸten
+			// Norden am größten
 			if (nordenZahl > ostenZahl && nordenZahl > westenZahl) {
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			} else
-			// Osten am grÃ¶ÃŸten
+			// Osten am größten
 			if (ostenZahl > nordenZahl && ostenZahl > westenZahl) {
 				ausgabe = gehNachOsten;
 			} else
-			// Westen am grÃ¶ÃŸten
+			// Westen am größten
 			if (westenZahl > ostenZahl && westenZahl > nordenZahl) {
 				ausgabe = gehNachWesten;
 			} else
-			// Norden und Osten gleich aber grÃ¶ÃŸer als Westen
+			// Norden und Osten gleich aber größer als Westen
 			if (nordenZahl == ostenZahl && nordenZahl > westenZahl) {
-				richtung2(zufallsZahl2, gehNachOsten, gehNachNorden);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachOsten;
+				} else
+					ausgabe = GEH_NACH_NORDEN;
 			} else
-			// Norden und Westen gleich aber grÃ¶ÃŸer als Osten
+			// Norden und Westen gleich aber größer als Osten
 			if (nordenZahl == westenZahl && nordenZahl > ostenZahl) {
-				richtung2(zufallsZahl2, gehNachWesten, gehNachNorden);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachWesten;
+				} else
+					ausgabe = GEH_NACH_NORDEN;
 			} else {
-				// Westen und Osten gleich aber grÃ¶ÃŸer als Norden
-				richtung2(zufallsZahl2, gehNachOsten, gehNachWesten);
+				// Westen und Osten gleich aber größer als Norden
+
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachOsten;
+				} else
+					ausgabe = gehNachWesten;
 			}
 			return ausgabe;
 		}
 
-		// Norden SÃ¼den Westen
-		if (lastWordEins.equals(norden) && lastWordZwei.equals(sueden) && lastWordDrei.equals(westen)) {
+		// Norden Süden Westen
+		if (lastWordEins.equals(NORDEN) && lastWordZwei.equals(sueden) && lastWordDrei.equals(westen)) {
 			// Gleiche Explorationszahl
 			if (nordenZahl == suedenZahl && nordenZahl == westenZahl) {
-				richtung3(zufallsZahl3, gehNachWesten, gehNachNorden, gehNachSueden);
+				if (zufallsZahl3 == 0) {
+					ausgabe = gehNachWesten;
+				} else if (zufallsZahl3 == 1) {
+					ausgabe = GEH_NACH_NORDEN;
+				} else
+					ausgabe = gehNachSueden;
 			} else
-			// Norden am grÃ¶ÃŸten
+			// Norden am größten
 			if (nordenZahl > suedenZahl && nordenZahl > westenZahl) {
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			} else
-			// SÃ¼den am grÃ¶ÃŸten
+			// Süden am größten
 			if (suedenZahl > nordenZahl && suedenZahl > westenZahl) {
 				ausgabe = gehNachSueden;
 			} else
-			// Westen am grÃ¶ÃŸten
+			// Westen am größten
 			if (westenZahl > suedenZahl && westenZahl > nordenZahl) {
 				ausgabe = gehNachWesten;
 			} else
-			// Norden und SÃ¼den gleich aber grÃ¶ÃŸer als Westen
+			// Norden und Süden gleich aber größer als Westen
 			if (nordenZahl == suedenZahl && nordenZahl > westenZahl) {
-				richtung2(zufallsZahl2, gehNachSueden, gehNachNorden);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachSueden;
+				} else
+					ausgabe = GEH_NACH_NORDEN;
 			} else
-			// Norden und Westen gleich aber grÃ¶ÃŸer als SÃ¼den
+			// Norden und Westen gleich aber größer als Süden
 			if (nordenZahl == westenZahl && nordenZahl > suedenZahl) {
-				richtung2(zufallsZahl2, gehNachWesten, gehNachNorden);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachWesten;
+				} else
+					ausgabe = GEH_NACH_NORDEN;
 			} else
-			// Westen und SÃ¼den gleich aber grÃ¶ÃŸer als Norden
+			// Westen und Süden gleich aber größer als Norden
 			if (westenZahl == suedenZahl && suedenZahl > nordenZahl) {
-				richtung2(zufallsZahl2, gehNachSueden, gehNachWesten);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachSueden;
+				} else
+					ausgabe = gehNachWesten;
 			}
 			return ausgabe;
 		}
 
-		// Osten SÃ¼den Westen
+		// Osten Süden Westen
 		if (lastWordEins.equals(osten) && lastWordZwei.equals(sueden) && lastWordDrei.equals(westen)) {
 			// Gleiche Explorationszahl
 			if (ostenZahl == suedenZahl && ostenZahl == westenZahl) {
-				richtung3(zufallsZahl3, gehNachWesten, gehNachOsten, gehNachSueden);
+				if (zufallsZahl3 == 0) {
+					ausgabe = gehNachWesten;
+				} else if (zufallsZahl3 == 1) {
+					ausgabe = gehNachOsten;
+				} else
+					ausgabe = gehNachSueden;
 			} else
-			// Osten am grÃ¶ÃŸten
+			// Osten am größten
 			if (ostenZahl > suedenZahl && ostenZahl > westenZahl) {
 				ausgabe = gehNachOsten;
 			} else
-			// SÃ¼den am grÃ¶ÃŸten
+			// Süden am größten
 			if (suedenZahl > ostenZahl && suedenZahl > westenZahl) {
 				ausgabe = gehNachSueden;
 			} else
-			// Westen am grÃ¶ÃŸten
+			// Westen am größten
 			if (westenZahl > suedenZahl && westenZahl > ostenZahl) {
 				ausgabe = gehNachWesten;
 			} else
-			// Osten und SÃ¼den gleich aber grÃ¶ÃŸer als Westen
+			// Osten und Süden gleich aber größer als Westen
 			if (ostenZahl == suedenZahl && ostenZahl > westenZahl) {
-				richtung2(zufallsZahl2, gehNachSueden, gehNachOsten);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachSueden;
+				} else
+					ausgabe = gehNachOsten;
 			} else
-			// Osten und Westen gleich aber grÃ¶ÃŸer als SÃ¼den
+			// Osten und Westen gleich aber größer als Süden
 			if (ostenZahl == westenZahl && ostenZahl > suedenZahl) {
-				richtung2(zufallsZahl2, gehNachWesten, gehNachOsten);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachWesten;
+				} else
+					ausgabe = gehNachOsten;
 			} else
-			// Westen und SÃ¼den gleich aber grÃ¶ÃŸer als Osten
+			// Westen und Süden gleich aber größer als Osten
 			if (westenZahl == suedenZahl && suedenZahl > ostenZahl) {
-				richtung2(zufallsZahl2, gehNachSueden, gehNachWesten);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachSueden;
+				} else
+					ausgabe = gehNachWesten;
 			}
 		}
 
@@ -320,27 +417,33 @@ public class Kombinatorik {
 
 		int zufallsZahl2 = zufall.nextInt(1);
 
-		// 6 MÃ¶glichkeiten
+		// 6 Möglichkeiten
 		// Norden und Osten
-		if (lastWordEins.equals(norden) && lastWordZwei.equals(osten)) {
+		if (lastWordEins.equals(NORDEN) && lastWordZwei.equals(osten)) {
 			if (nordenZahl == ostenZahl) {
-				richtung2(zufallsZahl2, gehNachOsten, gehNachNorden);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachOsten;
+				} else
+					ausgabe = GEH_NACH_NORDEN;
 			}
 			if (nordenZahl > ostenZahl) {
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			}
 			if (ostenZahl > nordenZahl) {
 				ausgabe = gehNachOsten;
 			}
 		}
 
-		// Norden und SÃ¼den
-		if (lastWordEins.equals(norden) && lastWordZwei.equals(sueden)) {
+		// Norden und Süden
+		if (lastWordEins.equals(NORDEN) && lastWordZwei.equals(sueden)) {
 			if (nordenZahl == suedenZahl) {
-				richtung2(zufallsZahl2, gehNachSueden, gehNachNorden);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachSueden;
+				} else
+					ausgabe = GEH_NACH_NORDEN;
 			}
 			if (nordenZahl > suedenZahl) {
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			}
 			if (suedenZahl > nordenZahl) {
 				ausgabe = gehNachSueden;
@@ -348,22 +451,28 @@ public class Kombinatorik {
 		}
 
 		// Norden und Westen
-		if (lastWordEins.equals(norden) && lastWordZwei.equals(westen)) {
+		if (lastWordEins.equals(NORDEN) && lastWordZwei.equals(westen)) {
 			if (nordenZahl == westenZahl) {
-				richtung2(zufallsZahl2, gehNachWesten, gehNachNorden);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachWesten;
+				} else
+					ausgabe = GEH_NACH_NORDEN;
 			}
 			if (nordenZahl > westenZahl) {
-				ausgabe = gehNachNorden;
+				ausgabe = GEH_NACH_NORDEN;
 			}
 			if (westenZahl > nordenZahl) {
 				ausgabe = gehNachWesten;
 			}
 		}
 
-		// Osten und SÃ¼den
+		// Osten und Süden
 		if (lastWordEins.equals(osten) && lastWordZwei.equals(sueden)) {
 			if (ostenZahl == suedenZahl) {
-				richtung2(zufallsZahl2, gehNachOsten, gehNachSueden);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachOsten;
+				} else
+					ausgabe = gehNachSueden;
 			}
 			if (ostenZahl > suedenZahl) {
 				ausgabe = gehNachOsten;
@@ -376,7 +485,10 @@ public class Kombinatorik {
 		// Osten und Westen
 		if (lastWordEins.equals(osten) && lastWordZwei.equals(westen)) {
 			if (ostenZahl == westenZahl) {
-				richtung2(zufallsZahl2, gehNachOsten, gehNachWesten);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachOsten;
+				} else
+					ausgabe = gehNachWesten;
 			}
 			if (ostenZahl > westenZahl) {
 				ausgabe = gehNachOsten;
@@ -389,7 +501,10 @@ public class Kombinatorik {
 		// Sueden und Westen
 		if (lastWordEins.equals(sueden) && lastWordZwei.equals(westen)) {
 			if (suedenZahl == westenZahl) {
-				richtung2(zufallsZahl2, gehNachWesten, gehNachSueden);
+				if (zufallsZahl2 == 0) {
+					ausgabe = gehNachWesten;
+				} else
+					ausgabe = gehNachSueden;
 			}
 			if (suedenZahl > westenZahl) {
 				ausgabe = gehNachSueden;
@@ -405,12 +520,12 @@ public class Kombinatorik {
 
 	public String moeglichkeitenBerechnen(String eins) {
 
-		// Nur eine MÃ¶glichkeit
+		// Nur eine Möglichkeit
 		String[] partsF = eins.split(" ");
 		String lastWord = partsF[partsF.length - 1].trim();
 		switch (lastWord) {
-		case norden:
-			ausgabe = gehNachNorden;
+		case NORDEN:
+			ausgabe = GEH_NACH_NORDEN;
 			break;
 		case osten:
 			ausgabe = gehNachOsten;
@@ -421,35 +536,6 @@ public class Kombinatorik {
 		default:
 			ausgabe = gehNachWesten;
 
-		}
-		return ausgabe;
-	}
-
-	public String richtung4(int zufallsZahl, String ifWert, String elseWert) {
-		if (zufallsZahl % 2 == 0) {
-			ausgabe = ifWert;
-		} else {
-			ausgabe = elseWert;
-		}
-		return ausgabe;
-	}
-
-	public String richtung3(int zufallsZahl, String ifWert, String elseIfWert, String elseWert) {
-		if (zufallsZahl == 0) {
-			ausgabe = ifWert;
-		} else if (zufallsZahl == 1) {
-			ausgabe = elseIfWert;
-		} else {
-			ausgabe = elseWert;
-		}
-		return ausgabe;
-	}
-
-	public String richtung2(int zufallsZahl, String ifWert, String elseWert) {
-		if (zufallsZahl == 0) {
-			ausgabe = ifWert;
-		} else {
-			ausgabe = elseWert;
 		}
 		return ausgabe;
 	}
