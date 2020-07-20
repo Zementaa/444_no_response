@@ -11,6 +11,7 @@ public class Explorer {
 	// Unbesuchter FORM - 7
 	// Unbesuchter FLOOR - 5
 	// FINISH - 6 (falls alle Formular gesammelt, sonst wie unten)
+	// SHEET - 5
 
 	// Werden in Laufzeit initialisiert
 	// TODO Was wenn jemand ein Formular in eine Sackgasse kickt
@@ -25,8 +26,10 @@ public class Explorer {
 	private int explorationsZahl;
 	private int exploitationsZahl;
 	private String feldStatus;
+	private int x;
+	private int y;
 
-	public Explorer(String feldStatus, int playerId, int countForms) {
+	public Explorer(String feldStatus, int playerId, int countForms, int x, int y) {
 		super();
 
 		this.exploitationsZahl = 696969;
@@ -51,6 +54,24 @@ public class Explorer {
 
 		}
 		this.feldStatus = feldStatus;
+		this.x = x;
+		this.y = y;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
 	}
 
 	public int getExploitationsZahl() {
