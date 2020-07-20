@@ -15,6 +15,10 @@ public class Kombinatorik {
 	private int playerId;
 	private int sizeY;
 	private int sizeX;
+	private int nordenZahl;
+	private int ostenZahl;
+	private int suedenZahl;
+	private int westenZahl;
 	private String meinFinish;
 	private String meinForm;
 	private Random zufall = new Random();
@@ -35,10 +39,8 @@ public class Kombinatorik {
 
 		// TODO was wenn Objekt auf anderen Seite des Spielfelds liegt?
 		// TODO in Methode auslagern + für alle anderen anpassen
-		int nordenZahl = karte[startX][((startY - 1) + sizeY) % sizeY].getExplorationsZahl();
-		int ostenZahl = karte[((startX + 1) + sizeX) % sizeX][startY].getExplorationsZahl();
-		int suedenZahl = karte[startX][((startY + 1) + sizeY) % sizeY].getExplorationsZahl();
-		int westenZahl = karte[((startX - 1) + sizeX) % sizeX][startY].getExplorationsZahl();
+
+		koordinatenAuslesen(karte, startX, startY, sizeX, sizeY);
 
 		String[] einsZweiDreiVier = { gehNachNorden, gehNachOsten, gehNachSueden, gehNachWesten };
 
@@ -145,10 +147,7 @@ public class Kombinatorik {
 		String[] partsD = drei.split(" ");
 		String lastWordDrei = partsD[partsD.length - 1].trim();
 
-		int nordenZahl = karte[startX][startY - 1].getExplorationsZahl();
-		int ostenZahl = karte[startX + 1][startY].getExplorationsZahl();
-		int suedenZahl = karte[startX][startY + 1].getExplorationsZahl();
-		int westenZahl = karte[startX - 1][startY].getExplorationsZahl();
+		koordinatenAuslesen(karte, startX, startY, sizeX, sizeY);
 
 		int zufallsZahl3 = zufall.nextInt(2);
 		int zufallsZahl2 = zufall.nextInt(1);
@@ -319,10 +318,7 @@ public class Kombinatorik {
 		String[] partsZ = zwei.split(" ");
 		String lastWordZwei = partsZ[partsZ.length - 1].trim();
 
-		int nordenZahl = karte[startX][startY - 1].getExplorationsZahl();
-		int ostenZahl = karte[startX + 1][startY].getExplorationsZahl();
-		int suedenZahl = karte[startX][startY + 1].getExplorationsZahl();
-		int westenZahl = karte[startX - 1][startY].getExplorationsZahl();
+		koordinatenAuslesen(karte, startX, startY, sizeX, sizeY);
 
 		int zufallsZahl2 = zufall.nextInt(1);
 
@@ -458,6 +454,13 @@ public class Kombinatorik {
 			ausgabe = elseWert;
 		}
 		return ausgabe;
+	}
+
+	public void koordinatenAuslesen(Explorer[][] karte, int startX, int startY, int sizeX, int sizeY) {
+		nordenZahl = karte[startX][((startY - 1) + sizeY) % sizeY].getExplorationsZahl();
+		ostenZahl = karte[((startX + 1) + sizeX) % sizeX][startY].getExplorationsZahl();
+		suedenZahl = karte[startX][((startY + 1) + sizeY) % sizeY].getExplorationsZahl();
+		westenZahl = karte[((startX - 1) + sizeX) % sizeX][startY].getExplorationsZahl();
 	}
 
 	public String getMeinFinish() {
