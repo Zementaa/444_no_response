@@ -6,3 +6,7 @@ Botname: 444_no_response
 
 
 Level2 Labi
+
+auch in Kommentaren keine Umlaute inkl. ß
+die Autoren sind alpabetisch nach Nachnamen sortiert
+Dokumentation darf gerne ergänzt werden! lade ich sofort hoch
