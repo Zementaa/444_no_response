@@ -117,6 +117,9 @@ public class NoResponse444 {
 			}
 		}
 
+		// FIXME erstes Feld
+		karte[jetztX][jetztY].setExplorationsZahl(1);
+		karte[jetztX][jetztY].setFeldStatus("START", level);
 		kombinator = new Kombinatorik(playerId, sizeX, sizeY);
 		zieleAufgedeckt++;
 		zielX = jetztX;
@@ -214,10 +217,11 @@ public class NoResponse444 {
 				if (countForms == formCount && sachbearbeiterGefunden) {
 					direktenWegGehen();
 				} else if (exploitation) {
-					liste = exploitation(liste, zielX, zielY);
+					// liste = exploitation(liste, zielX, zielY);
 				} else if (randomNumber > epsilon) {
 
-					liste = exploitation(liste, zielX, zielY);
+					// liste = exploitation(liste, zielX, zielY);
+					exploration();
 
 				} else {
 					// Zufälliges Explorieren
