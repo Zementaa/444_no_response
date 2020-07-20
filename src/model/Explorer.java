@@ -2,8 +2,13 @@ package model;
 
 /**
  * 
- * @author
- *
+ * @author C.Camier
+ * @author D.Kleemann
+ * @author C.Peters
+ * @author L.Wascher
+ * 
+ * Feststellung der Wertigkeit von den bekannten Feldern
+ * Deklarierung und Initialisierung der Attribute
  */
 public class Explorer {
 	// Explorationszahl: Jedes Feld wird mit einer Wertigkeit initialisiert
@@ -31,7 +36,7 @@ public class Explorer {
 
 		this.exploitationsZahl = 696969;
 
-		// Wände
+		// WÃ¤nde
 		if (feldStatus.equals("WALL")) {
 			this.explorationsZahl = 0;
 			this.exploitationsZahl = 999999;
@@ -52,27 +57,81 @@ public class Explorer {
 		}
 		this.feldStatus = feldStatus;
 	}
-
+	
+	/**
+	 * 
+	 * @author C.Camier
+	 * @author D.Kleemann
+	 * @author C.Peters
+	 * @author L.Wascher
+	 * 
+	 * @return
+	 */
 	public int getExploitationsZahl() {
 		return exploitationsZahl;
 	}
-
+	
+	/**
+	 * 
+	 * @author C.Camier
+	 * @author D.Kleemann
+	 * @author C.Peters
+	 * @author L.Wascher
+	 * 
+	 * @param exploitationsZahl
+	 */
 	public void setExploitationsZahl(int exploitationsZahl) {
 		this.exploitationsZahl = exploitationsZahl;
 	}
 
+	/**
+	 * 
+	 * @author C.Camier
+	 * @author D.Kleemann
+	 * @author C.Peters
+	 * @author L.Wascher
+	 * 
+	 * @return
+	 */
 	public int getExplorationsZahl() {
 		return explorationsZahl;
 	}
 
+	/**
+	 * 
+	 * @author C.Camier
+	 * @author D.Kleemann
+	 * @author C.Peters
+	 * @author L.Wascher
+	 * 
+	 * @param explorationsZahl
+	 */
 	public void setExplorationsZahl(int explorationsZahl) {
 		this.explorationsZahl = explorationsZahl;
 	}
 
+	/**
+	 * 
+	 * @author C.Camier
+	 * @author D.Kleemann
+	 * @author C.Peters
+	 * @author L.Wascher
+	 * @return
+	 */
 	public String getFeldStatus() {
 		return feldStatus;
 	}
 
+	/**
+	 * 
+	 * @author C.Camier
+	 * @author D.Kleemann
+	 * @author C.Peters
+	 * @author L.Wascher
+	 * 
+	 * @param feldStatus
+	 * @param playerId
+	 */
 	public void setFeldStatus(String feldStatus, int playerId) {
 
 		if (feldStatus.contains("FORM " + playerId)) {
