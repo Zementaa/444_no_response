@@ -5,7 +5,10 @@ import java.util.List;
 
 /**
  * 
- * @author Internet
+ * @author C.Camier
+ * @author D.Kleemann
+ * @author C.Peters
+ * @author L.Wascher
  *
  */
 public class Vertex implements Comparable<Vertex> {
