@@ -7,7 +7,10 @@ import java.util.PriorityQueue;
 
 /**
  * 
- * @author Internet
+ * @author C.Camier
+ * @author D.Kleemann
+ * @author C.Peters
+ * @author L.Wascher
  *
  */
 public class DijkstraShortestPath {
