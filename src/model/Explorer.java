@@ -1,14 +1,14 @@
 package model;
 
 /**
+ * Feststellung der Wertigkeit von den bekannten Feldern Deklarierung und
+ * Initialisierung der Attribute.
  * 
  * @author C.Camier
  * @author D.Kleemann
  * @author C.Peters
  * @author L.Wascher
  * 
- *         Feststellung der Wertigkeit von den bekannten Feldern Deklarierung
- *         und Initialisierung der Attribute
  */
 public class Explorer {
 	// Explorationszahl: Jedes Feld wird mit einer Wertigkeit initialisiert
@@ -79,71 +79,30 @@ public class Explorer {
 		this.y = y;
 	}
 
-	/**
-	 * 
-	 * @author C.Camier
-	 * @author D.Kleemann
-	 * @author C.Peters
-	 * @author L.Wascher
-	 * 
-	 * @return
-	 */
 	public int getExploitationsZahl() {
 		return exploitationsZahl;
 	}
 
-	/**
-	 * 
-	 * @author C.Camier
-	 * @author D.Kleemann
-	 * @author C.Peters
-	 * @author L.Wascher
-	 * 
-	 * @param exploitationsZahl
-	 */
 	public void setExploitationsZahl(int exploitationsZahl) {
 		this.exploitationsZahl = exploitationsZahl;
 	}
 
-	/**
-	 * 
-	 * @author C.Camier
-	 * @author D.Kleemann
-	 * @author C.Peters
-	 * @author L.Wascher
-	 * 
-	 * @return
-	 */
 	public int getExplorationsZahl() {
 		return explorationsZahl;
 	}
 
-	/**
-	 * 
-	 * @author C.Camier
-	 * @author D.Kleemann
-	 * @author C.Peters
-	 * @author L.Wascher
-	 * 
-	 * @param explorationsZahl
-	 */
 	public void setExplorationsZahl(int explorationsZahl) {
 		this.explorationsZahl = explorationsZahl;
 	}
 
-	/**
-	 * 
-	 * @author C.Camier
-	 * @author D.Kleemann
-	 * @author C.Peters
-	 * @author L.Wascher
-	 * @return
-	 */
 	public String getFeldStatus() {
 		return feldStatus;
 	}
 
 	/**
+	 * Setzen des Feldstatus unter Beachtung von Constraints.
+	 * 
+	 * Eigenes Formular Explorationszahl auf 7, sonst 5.
 	 * 
 	 * @author C.Camier
 	 * @author D.Kleemann
@@ -152,6 +111,7 @@ public class Explorer {
 	 * 
 	 * @param feldStatus
 	 * @param playerId
+	 *
 	 */
 	public void setFeldStatus(String feldStatus, int playerId) {
 
