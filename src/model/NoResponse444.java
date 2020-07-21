@@ -6,14 +6,13 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * 
+ * Klasse des Bots namens NoResponse444 und Deklarierung und teilweise
+ * Initialisierung der Attribute
+ *
  * @author C.Camier
  * @author D.Kleemann
  * @author C.Peters
  * @author L.Wascher
- * 
- *         Klasse des Bots namens NO_Response und Deklarierung sowie
- *         Deklarierung und teilweise Initialisierung der Attribute
  *
  */
 public class NoResponse444 {
@@ -55,12 +54,13 @@ public class NoResponse444 {
 	private static String currentCellStatus;
 
 	/**
+	 * Initialisierung der Eingabe-Attribute
+	 * 
 	 * @author C.Camier
 	 * @author D.Kleemann
 	 * @author C.Peters
 	 * @author L.Wascher
 	 * 
-	 *         Initialisierung der Eingabe-Attribute
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -81,12 +81,13 @@ public class NoResponse444 {
 	}
 
 	/**
+	 * Eingabe der Informationen zum Labyrinth und dem eigenen Spieler (Bot)
+	 * 
 	 * @author C.Camier
 	 * @author D.Kleemann
 	 * @author C.Peters
 	 * @author L.Wascher
 	 * 
-	 *         Eingabe der Informationen zum Labyrinth und dem eigenen Spieler (Bot)
 	 * @param input
 	 */
 	private static void init(Scanner input) {
@@ -128,13 +129,13 @@ public class NoResponse444 {
 	}
 
 	/**
+	 * Art und Weise, wie der Bot läuft
+	 *
 	 * @author C.Camier
 	 * @author D.Kleemann
 	 * @author C.Peters
 	 * @author L.Wascher
 	 * 
-	 *         Art und Weise, wie der Bot läuft Bedingungen zur Entscheidung, wie er
-	 *         läuft mittels switch
 	 * @param input
 	 */
 	private static void turn(Scanner input) {
@@ -235,12 +236,14 @@ public class NoResponse444 {
 	}
 
 	/**
+	 * Mitschreiben der gewählten Richtung.
+	 *
 	 * @author C.Camier
 	 * @author D.Kleemann
 	 * @author C.Peters
 	 * @author L.Wascher
 	 * 
-	 *         Ausgabe der ausgeführten Aktion
+	 * 
 	 */
 	private static void ausgabeValidieren() {
 		vorherX = jetztX;
@@ -264,13 +267,16 @@ public class NoResponse444 {
 	}
 
 	/**
+	 * Direkter Weg zum Sachbearbeiter wenn alle Formulare eingesammelt.
+	 * 
+	 * Falls der Bot alle Formulare hat und den Weg zum Sachbearbeiter kennt, geht
+	 * er den direkten Weg
+	 *
 	 * @author C.Camier
 	 * @author D.Kleemann
 	 * @author C.Peters
 	 * @author L.Wascher
 	 * 
-	 *         Falls der Bot alle Formulare hat und den Weg zum Sachbearbeiter
-	 *         kennt, geht er den direkten Weg
 	 */
 	private static void direktenWegGehen() {
 
@@ -297,24 +303,31 @@ public class NoResponse444 {
 	}
 
 	/**
+	 * Auswertung des Feldstatus vom aktuellen Standort.
+	 *
+	 * Herausfinden, auf welche Art von Feld der Bot sich befindet z.B. ob dort sein
+	 * eigenes Formular liegt. Sheets werden bewusst gekickt um ggf verdeckte Forms
+	 * frei zu legen.
+	 * 
 	 * @author C.Camier
 	 * @author D.Kleemann
 	 * @author C.Peters
 	 * @author L.Wascher
-	 * 
-	 *         Auswertung bzw. herausfinden, auf welche Art von Feld der Bot sich
-	 *         befindet z.B. ob dort sein eigenes Formular liegt
+	 *
 	 * @return boolean true, falls man auf einem besonderen Feld steht
 	 */
 	private static boolean steheAufEinemInteressantenFeld() {
 
 		// Befinde ich mich mit einem anderen Bot auf einem Feld?
+		// Bewusste Entscheidung anderen Bots nicht aus dem weg zu gehen, wissen wir
+		// nicht wohin er geht und ggf. geht er uns aus dem Weg.
 		char ausrufezeichen = currentCellStatus.charAt(currentCellStatus.length() - 1);
 		if (ausrufezeichen == '!' && !lastActionsResult.equals("NOK TALKING")) {
 			ausgabe = "position";
 			return true;
 		} else
-		// Sheet kicken
+		// Sheet kicken, bewusste Entscheidung nur bekommene Sheets abzulegen, daher
+		// werden Sheets gekick um Form darunter freizulegen
 		if (currentCellStatus.contains("SHEET") && !karte[jetztX][jetztY].getFeldStatus().contains("EIGENESSHEET")) {
 
 			if (karte[jetztX][((jetztY - 1) + sizeY) % sizeY].getFeldStatus().contains("FLOOR")) {
@@ -357,7 +370,8 @@ public class NoResponse444 {
 
 		}
 		// lege Sheets auf die Formulare meiner Gegner
-
+		// bewusste Entscheidung nur bekommene Sheets abzulegen, um dadurch weniger
+		// Zuege zu brauchen
 		else if (currentCellStatus.contains("FORM") && anzahlSheets > 0 && !currentCellStatus.contains(meinForm))
 
 		{
@@ -373,14 +387,12 @@ public class NoResponse444 {
 	}
 
 	/**
-	 * 
+	 * Statusmeldungen, der Felder um den Bot, aktualisieren.
+	 *
 	 * @author C.Camier
 	 * @author D.Kleemann
 	 * @author C.Peters
 	 * @author L.Wascher
-	 * 
-	 *         Hier werden die Statusmeldungen aktualisiert, also die Felder um den
-	 *         Bot herum
 	 * 
 	 * @param input
 	 */
@@ -474,12 +486,13 @@ public class NoResponse444 {
 	}
 
 	/**
+	 * Exploration des unbekannten Spielfelds.
+	 *
 	 * @author C.Camier
 	 * @author D.Kleemann
 	 * @author C.Peters
 	 * @author L.Wascher
 	 * 
-	 *         Diese Methode dient der Exploration des unbekannten Spielfelds
 	 */
 	private static void exploration() {
 
@@ -509,13 +522,12 @@ public class NoResponse444 {
 	}
 
 	/**
+	 * Exploitation des bereits etwas besser bekannten Spielfelds.
+	 * 
 	 * @author C.Camier
 	 * @author D.Kleemann
 	 * @author C.Peters
 	 * @author L.Wascher
-	 * 
-	 *         Diese Methode dient der Exploitation des bereits etwas besser
-	 *         bekannten Spielfelds
 	 * 
 	 * @param zielX X-Variable des Zielfelds
 	 * @param zielY Y-Variable des Zielfelds
