@@ -19,7 +19,6 @@ public class Explorer {
 	// SHEET - 5
 
 	// Werden in Laufzeit initialisiert
-	// TODO Was wenn jemand ein Formular in eine Sackgasse kickt
 	// Besucht (Sackgasse) - 1
 	// Besucht (Gasse) - 2
 	// Besucht (3-Feld-Kreuzung) - 3

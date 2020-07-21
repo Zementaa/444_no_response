@@ -66,9 +66,6 @@ public class Kombinatorik {
 		// Nur eine Reihenfolge wie die Daten hereinkommen, deshalb keine Unterscheidung
 		// in verschiedene Faelle
 
-		// TODO was wenn Objekt auf anderen Seite des Spielfelds liegt?
-		// TODO in Methode auslagern + für alle anderen anpassen
-
 		koordinatenAuslesen(karte, startX, startY, sizeX, sizeY);
 
 		String[] einsZweiDreiVier = { gehNachNorden, gehNachOsten, gehNachSueden, gehNachWesten };
@@ -106,7 +103,6 @@ public class Kombinatorik {
 		} else
 
 		// Zwei groessere Zahlen
-		// TODO Ueberpruefen: Was wenn er in einem "Block" gefangen ist weil dieser nur
 		// Umfelder mit der selben zahl hat
 		// Letzte zehn IDs mitschreiben --> 3 Wiederholungen
 		// Ueberlegung: Warteschlange mit 5 Feldern, nach zwei Wdh. verlassen
@@ -141,8 +137,6 @@ public class Kombinatorik {
 
 		// Drei groessere Zahlen - eine kleiner und alle anderen gleich
 		// Norden am kleinsten
-		// TODO Ueberpruefen
-
 		if (nordenZahl < ostenZahl && ostenZahl == suedenZahl && ostenZahl == westenZahl) {
 			richtung3(zufallsZahl3, gehNachSueden, gehNachOsten, gehNachWesten);
 		} else
@@ -256,7 +250,6 @@ public class Kombinatorik {
 			return ausgabe;
 		}
 
-		// TODO Methode mit sechs Uebergabeparameter
 		// Norden Osten Westen
 		if (lastWordEins.equals(norden) && lastWordZwei.equals(osten) && lastWordDrei.equals(westen)) {
 			// Gleiche Explorationszahl

@@ -118,9 +118,8 @@ public class NoResponse444 {
 			}
 		}
 
-		// FIXME erstes Feld
 		karte[jetztX][jetztY].setExplorationsZahl(1);
-		karte[jetztX][jetztY].setFeldStatus("START", level);
+		karte[jetztX][jetztY].setFeldStatus("FLOOR", level);
 		kombinator = new Kombinatorik(playerId, sizeX, sizeY);
 		zieleAufgedeckt++;
 		zielX = jetztX;
@@ -147,7 +146,6 @@ public class NoResponse444 {
 
 			// Rundeninformationen auslesen
 			lastActionsResult = input.nextLine();
-			// TODO lastactionresult abprüfen
 
 			epsilon = 1 - zieleAufgedeckt / (double) kartenGroesse;
 
@@ -156,39 +154,11 @@ public class NoResponse444 {
 			aktualsiereStatusMeldungen(input);
 
 			StringBuilder sb = new StringBuilder();
-			sb.append("LastActionResult: " + lastActionsResult + "\nZiele aufgedeckt: " + zieleAufgedeckt + " von "
-					+ kartenGroesse + " Epsilon:" + epsilon + "\nPosition X: " + jetztX + " Y: " + jetztY
-					+ " Feldstatus " + karte[jetztX][jetztY].getFeldStatus() + " Explorationszahl: "
-					+ karte[jetztX][jetztY].getExplorationsZahl() + " Exploitationszahl: "
-					+ karte[jetztX][jetztY].getExploitationsZahl() + "\nFloorCount: " + floorCount
-					+ "\nFormulare gefunden: " + countForms + " Von: " + formCount + " Kombinator.meinForm: "
-					+ kombinator.getMeinForm() + " Kombinator.meinFinish: " + kombinator.getMeinFinish()
-					+ "\nSchrittzaehler: " + schrittZaehler + " Hab mich bewegt: " + habeMichBewegt
-					+ "\nRandom Number: " + randomNumber + "\nExploitation ja? " + exploitation
-					+ "\nExplorationszahl Norden: "
-					+ karte[jetztX][((jetztY - 1) + sizeY) % sizeY].getExplorationsZahl() + "\nExplorationszahl Osten: "
-					+ karte[((jetztX + 1) + sizeX) % sizeX][jetztY].getExplorationsZahl() + "\nExplorationszahl Süden: "
-					+ karte[jetztX][((jetztY + 1) + sizeY) % sizeY].getExplorationsZahl()
-					+ "\nExplorationszahl Westen: "
-					+ karte[((jetztX - 1) + sizeX) % sizeX][jetztY].getExplorationsZahl() + "\nExplorationszahl HIER: "
-					+ karte[jetztX][jetztY].getExplorationsZahl() + "\nExploitationszahl HIER: "
-					+ karte[jetztX][jetztY].getExploitationsZahl() + "\nExploitationszahl Norden: "
-					+ karte[jetztX][((jetztY - 1) + sizeY) % sizeY].getExploitationsZahl()
-					+ "\nExploitationszahl Osten: "
-					+ karte[((jetztX + 1) + sizeX) % sizeX][jetztY].getExploitationsZahl()
-					+ "\nExploitationszahl Süden: "
-					+ karte[jetztX][((jetztY + 1) + sizeY) % sizeY].getExploitationsZahl()
-					+ "\nExploitationszahl Westen: "
-					+ karte[((jetztX - 1) + sizeX) % sizeX][jetztY].getExploitationsZahl() + "\nFeldstatus Norden: "
-					+ karte[jetztX][((jetztY - 1) + sizeY) % sizeY].getFeldStatus() + "\nFeldstatus Osten: "
-					+ karte[((jetztX + 1) + sizeX) % sizeX][jetztY].getFeldStatus() + "\nFeldstatus Süden: "
-					+ karte[jetztX][((jetztY + 1) + sizeY) % sizeY].getFeldStatus() + "\nFeldstatus Westen: "
-					+ karte[((jetztX - 1) + sizeX) % sizeX][jetztY].getFeldStatus() + "\nKartenlänge: " + karte.length
-					+ " Liste des kürzesten Wegs: " + liste.toString());
+			sb.append("LastActionResult: " + lastActionsResult);
 
 			// Debug Information ausgeben (optional möglich)
 			System.err.println(sb.toString());
-
+			// Alle Fälle werden abgehandelt, aber zur Sicherheit Koordinaten überprüfen
 			switch (lastActionsResult) {
 			case "NOK BLOCKED":
 
@@ -203,7 +173,6 @@ public class NoResponse444 {
 			case "NOK TALKING":
 
 			case "NOK NOTSUPPORTED":
-				// Alle Fälle werden eig abgehandelt, aber zur Sicherheit Koordinaten überprüfen
 				jetztX = vorherX;
 				jetztY = vorherY;
 
@@ -642,9 +611,11 @@ public class NoResponse444 {
 				liste.add(vertex);
 			}
 
-			// TODO
-			// In selbstgeschriebener Testklasse (Testumgebung) funktioniert die Umsetzung,
+			// FIXME In selbstgeschriebener Testklasse (Testumgebung) funktioniert die
+			// Umsetzung,
 			// leider hier nicht
+			// Diese Methode hätte eig das Schneckenhaus-Problem gelöst (wenn der Bot sich
+			// selbst gefangen nimmt in einer Schleife)
 			if (!liste.isEmpty() && liste != null) {
 				// liste.remove(0);
 
@@ -665,12 +636,6 @@ public class NoResponse444 {
 					listZaehler = 0;
 					return liste;
 				}
-
-			} else {
-				// TODO Fehler abfangen
-				// exploitation = false;
-				// exploration();
-				// return liste;
 			}
 
 		}
