@@ -3,14 +3,14 @@ package model;
 import java.util.Random;
 
 /**
+ * Kombinationen m�glicher Aktionen Deklarierung und Initialisierung der
+ * Attribute
  * 
  * @author C.Camier
  * @author D.Kleemann
  * @author C.Peters
  * @author L.Wascher
  *
- * Kombinationen möglicher Aktionen
- * Deklarierung und Initialisierung der Attribute
  */
 public class Kombinatorik {
 	private final String norden = "norden";
@@ -43,13 +43,13 @@ public class Kombinatorik {
 	}
 
 	/**
+	 * Unterscheidung & Errechnung von F�llen, um eine Aktion (Richtung) zu
+	 * bestimmen bei 4 Richtungen
 	 * 
 	 * @author C.Camier
 	 * @author D.Kleemann
 	 * @author C.Peters
 	 * @author L.Wascher
-	 * 
-	 * Unterscheidung & Errechnung von Fällen, um eine Aktion (Richtung) zu bestimmen
 	 * 
 	 * @param eins
 	 * @param zwei
@@ -58,7 +58,8 @@ public class Kombinatorik {
 	 * @param karte
 	 * @param startX
 	 * @param startY
-	 * @return
+	 * @return ausgabe
+	 *
 	 */
 	public String moeglichkeitenBerechnen(String eins, String zwei, String drei, String vier, Explorer[][] karte,
 			int startX, int startY) {
@@ -66,7 +67,7 @@ public class Kombinatorik {
 		// in verschiedene Faelle
 
 		// TODO was wenn Objekt auf anderen Seite des Spielfelds liegt?
-		// TODO in Methode auslagern + für alle anderen anpassen
+		// TODO in Methode auslagern + f�r alle anderen anpassen
 
 		koordinatenAuslesen(karte, startX, startY, sizeX, sizeY);
 
@@ -109,7 +110,7 @@ public class Kombinatorik {
 		// Umfelder mit der selben zahl hat
 		// Letzte zehn IDs mitschreiben --> 3 Wiederholungen
 		// Ueberlegung: Warteschlange mit 5 Feldern, nach zwei Wdh. verlassen
-		// Norden und Osten die zwei grÃ¶ÃŸten
+		// Norden und Osten die zwei größten
 		if (nordenZahl == ostenZahl && nordenZahl > suedenZahl && nordenZahl > westenZahl) {
 			richtung4(zufallsZahl4, gehNachOsten, gehNachNorden);
 		} else
@@ -164,13 +165,13 @@ public class Kombinatorik {
 	}
 
 	/**
+	 * Unterscheidung & Errechnung von F�llen, um eine Aktion (Richtung) zu
+	 * bestimmen bei 3 Richtungen
 	 * 
 	 * @author C.Camier
 	 * @author D.Kleemann
 	 * @author C.Peters
 	 * @author L.Wascher
-	 * 
-	 * Errechnung der Moeglichkeiten
 	 * 
 	 * @param eins
 	 * @param zwei
@@ -178,7 +179,8 @@ public class Kombinatorik {
 	 * @param karte
 	 * @param startX
 	 * @param startY
-	 * @return
+	 * @return ausgabe
+	 *
 	 */
 	public String moeglichkeitenBerechnen(String eins, String zwei, String drei, Explorer[][] karte, int startX,
 			int startY) {
@@ -243,7 +245,7 @@ public class Kombinatorik {
 			if (nordenZahl == ostenZahl && nordenZahl > suedenZahl) {
 				richtung2(zufallsZahl2, gehNachOsten, gehNachNorden);
 			} else
-			// Norden und SÃ¼den gleich aber groesser als Osten
+			// Norden und Süden gleich aber groesser als Osten
 			if (nordenZahl == suedenZahl && nordenZahl > ostenZahl) {
 				richtung2(zufallsZahl2, gehNachSueden, gehNachNorden);
 			} else
@@ -301,7 +303,7 @@ public class Kombinatorik {
 			if (suedenZahl > nordenZahl && suedenZahl > westenZahl) {
 				ausgabe = gehNachSueden;
 			} else
-			// Westen am grÃ¶ÃŸten
+			// Westen am größten
 			if (westenZahl > suedenZahl && westenZahl > nordenZahl) {
 				ausgabe = gehNachWesten;
 			} else
@@ -356,6 +358,8 @@ public class Kombinatorik {
 	}
 
 	/**
+	 * Unterscheidung & Errechnung von F�llen, um eine Aktion (Richtung) zu
+	 * bestimmen bei 2 Richtungen
 	 * 
 	 * @author C.Camier
 	 * @author D.Kleemann
@@ -367,7 +371,9 @@ public class Kombinatorik {
 	 * @param karte
 	 * @param startX
 	 * @param startY
-	 * @return
+	 * @return ausgabe
+	 * 
+	 *
 	 */
 	public String moeglichkeitenBerechnen(String eins, String zwei, Explorer[][] karte, int startX, int startY) {
 
@@ -421,7 +427,7 @@ public class Kombinatorik {
 			}
 		}
 
-		// Osten und SÃ¼den
+		// Osten und Süden
 		if (lastWordEins.equals(osten) && lastWordZwei.equals(sueden)) {
 			if (ostenZahl == suedenZahl) {
 				richtung2(zufallsZahl2, gehNachOsten, gehNachSueden);
@@ -465,6 +471,8 @@ public class Kombinatorik {
 	}
 
 	/**
+	 * Unterscheidung & Errechnung von F�llen, um eine Aktion (Richtung) zu
+	 * bestimmen bei 1 Richtung
 	 * 
 	 * @author C.Camier
 	 * @author D.Kleemann
@@ -472,11 +480,12 @@ public class Kombinatorik {
 	 * @author L.Wascher
 	 * 
 	 * @param eins
-	 * @return
+	 * @return ausgabe
+	 *
 	 */
 	public String moeglichkeitenBerechnen(String eins) {
 
-		// Nur eine MÃ¶glichkeit
+		// Nur eine Möglichkeit
 		String[] partsF = eins.split(" ");
 		String lastWord = partsF[partsF.length - 1].trim();
 		switch (lastWord) {
@@ -497,7 +506,9 @@ public class Kombinatorik {
 	}
 
 	/**
-	 * 
+	 * Ausgliederung redundanter Codezeilen zur Pr�fung des Zufallswertes bei 4
+	 * Richtungen
+	 *
 	 * @author C.Camier
 	 * @author D.Kleemann
 	 * @author C.Peters
@@ -506,7 +517,9 @@ public class Kombinatorik {
 	 * @param zufallsZahl
 	 * @param ifWert
 	 * @param elseWert
-	 * @return
+	 * @return ausgabw
+	 *
+	 *
 	 */
 	public String richtung4(int zufallsZahl, String ifWert, String elseWert) {
 		if (zufallsZahl % 2 == 0) {
@@ -518,6 +531,8 @@ public class Kombinatorik {
 	}
 
 	/**
+	 * Ausgliederung redundanter Codezeilen zur Pr�fung des Zufallswertes bei 3
+	 * Richtungen
 	 * 
 	 * @author C.Camier
 	 * @author D.Kleemann
@@ -528,7 +543,8 @@ public class Kombinatorik {
 	 * @param ifWert
 	 * @param elseIfWert
 	 * @param elseWert
-	 * @return
+	 * @return ausgabe
+	 *
 	 */
 	public String richtung3(int zufallsZahl, String ifWert, String elseIfWert, String elseWert) {
 		if (zufallsZahl == 0) {
@@ -542,6 +558,8 @@ public class Kombinatorik {
 	}
 
 	/**
+	 * Ausgliederung redundanter Codezeilen zur Pr�fung des Zufallswertes bei 2
+	 * Richtungen
 	 * 
 	 * @author C.Camier
 	 * @author D.Kleemann
@@ -551,7 +569,8 @@ public class Kombinatorik {
 	 * @param zufallsZahl
 	 * @param ifWert
 	 * @param elseWert
-	 * @return
+	 * @return ausgabe
+	 *
 	 */
 	public String richtung2(int zufallsZahl, String ifWert, String elseWert) {
 		if (zufallsZahl == 0) {
@@ -563,6 +582,7 @@ public class Kombinatorik {
 	}
 
 	/**
+	 * Ausgliederung redundanter Codezeilen zur Setzung Richtungsvariablen.
 	 * 
 	 * @author C.Camier
 	 * @author D.Kleemann
@@ -574,6 +594,8 @@ public class Kombinatorik {
 	 * @param startY
 	 * @param sizeX
 	 * @param sizeY
+	 *
+	 *
 	 */
 	public void koordinatenAuslesen(Explorer[][] karte, int startX, int startY, int sizeX, int sizeY) {
 		nordenZahl = karte[startX][((startY - 1) + sizeY) % sizeY].getExplorationsZahl();
@@ -582,54 +604,18 @@ public class Kombinatorik {
 		westenZahl = karte[((startX - 1) + sizeX) % sizeX][startY].getExplorationsZahl();
 	}
 
-	/**
-	 * 
-	 * @author C.Camier
-	 * @author D.Kleemann
-	 * @author C.Peters
-	 * @author L.Wascher
-	 * 
-	 * @return
-	 */
 	public String getMeinFinish() {
 		return meinFinish;
 	}
 
-	/**
-	 * 
-	 * @author C.Camier
-	 * @author D.Kleemann
-	 * @author C.Peters
-	 * @author L.Wascher
-	 * 
-	 * @param meinFinish
-	 */
 	public void setMeinFinish(String meinFinish) {
 		this.meinFinish = meinFinish;
 	}
 
-	/**
-	 * 
-	 * @author C.Camier
-	 * @author D.Kleemann
-	 * @author C.Peters
-	 * @author L.Wascher
-	 * 
-	 * @return
-	 */
 	public String getMeinForm() {
 		return meinForm;
 	}
 
-	/**
-	 * 
-	 * @author C.Camier
-	 * @author D.Kleemann
-	 * @author C.Peters
-	 * @author L.Wascher
-	 * 
-	 * @param meinForm
-	 */
 	public void setMeinForm(String meinForm) {
 		this.meinForm = meinForm;
 	}
