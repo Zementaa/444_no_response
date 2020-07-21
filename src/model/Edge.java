@@ -2,6 +2,8 @@ package model;
 
 /**
  * 
+ * Die Edge Klasse zieht die Kanten zwischen zwei Knoten.
+ * 
  * @author C.Camier
  * @author D.Kleemann
  * @author C.Peters

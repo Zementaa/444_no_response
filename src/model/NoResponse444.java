@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 /**
  * Klasse des Bots namens NoResponse444 und Deklarierung und teilweise
- * Initialisierung der Attribute
+ * Initialisierung der Attribute.
  *
  * @author C.Camier
  * @author D.Kleemann

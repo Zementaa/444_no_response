@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 /**
+ * DijkstraShortestPath berechnet den kürzesten Weg zwischen zwei Vertexen.
+ * 
  * 
  * @author C.Camier
  * @author D.Kleemann
@@ -15,6 +17,11 @@ import java.util.PriorityQueue;
  */
 public class DijkstraShortestPath {
 
+	/**
+	 * Initialisiert den Startknoten.
+	 * 
+	 * @param sourceVertex Startknoten
+	 */
 	public void computeShortestPaths(Vertex sourceVertex) {
 
 		sourceVertex.setDistance(0);
@@ -44,6 +51,12 @@ public class DijkstraShortestPath {
 		}
 	}
 
+	/**
+	 * Erstellt die Liste des kürzesten Wegs.
+	 * 
+	 * @param targetVertex Zielknoten
+	 * @return List<Vertex> Liste mit allen Vertexen
+	 */
 	public List<Vertex> getShortestPathTo(Vertex targetVertex) {
 		List<Vertex> path = new ArrayList<>();
 

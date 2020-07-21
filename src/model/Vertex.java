@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Jeder Vertex ist ein Knoten bei der Entfernungsberechnung
+ * 
+ * 
  * 
  * @author C.Camier
  * @author D.Kleemann
